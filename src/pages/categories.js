@@ -1,7 +1,1 @@
-// src/pages/categories.js
-export default function Categories() {
-  const el = document.createElement('div');
-  el.className = 'page categories';
-  el.textContent = 'Categories';
-  return el;
-}
+export async function renderCategories(params = {}) { return `<div style="padding:4rem;text-align:center;font-family:monospace">categories</div>` }

@@ -1,7 +1,1 @@
-// src/pages/videos.js
-export default function Videos() {
-  const el = document.createElement('div');
-  el.className = 'page videos';
-  el.textContent = 'Vídeos';
-  return el;
-}
+export async function renderVideos(params = {}) { return `<div style="padding:4rem;text-align:center;font-family:monospace">videos</div>` }

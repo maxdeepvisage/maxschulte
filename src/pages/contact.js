@@ -1,7 +1,1 @@
-// src/pages/contact.js
-export default function Contact() {
-  const el = document.createElement('div');
-  el.className = 'page contact';
-  el.textContent = 'Contato';
-  return el;
-}
+export async function renderContact(params = {}) { return `<div style="padding:4rem;text-align:center;font-family:monospace">contact</div>` }

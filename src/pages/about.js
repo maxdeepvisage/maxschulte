@@ -1,7 +1,1 @@
-// src/pages/about.js
-export default function About() {
-  const el = document.createElement('div');
-  el.className = 'page about';
-  el.textContent = 'Sobre';
-  return el;
-}
+export async function renderAbout(params = {}) { return `<div style="padding:4rem;text-align:center;font-family:monospace">about</div>` }

@@ -1,7 +1,1 @@
-// src/pages/galeria.js
-export default function Galeria() {
-  const el = document.createElement('div');
-  el.className = 'page galeria';
-  el.textContent = 'Galeria';
-  return el;
-}
+export async function renderGaleria(params = {}) { return `<div style="padding:4rem;text-align:center;font-family:monospace">galeria</div>` }

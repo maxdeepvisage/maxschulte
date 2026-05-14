@@ -1,3 +1,4 @@
 import './styles/global.css'
+import { initRouter } from './router.js'
 
-console.log('ok')
+initRouter()

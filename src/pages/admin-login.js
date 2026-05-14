@@ -1,7 +1,3 @@
-// src/pages/admin-login.js
-export default function AdminLogin() {
-  const el = document.createElement('div');
-  el.className = 'page admin-login';
-  el.textContent = 'Admin Login';
-  return el;
+export async function renderAdminLogin(params = {}) {
+  return `<div style="padding:4rem;text-align:center;font-family:monospace">admin-login</div>`
 }

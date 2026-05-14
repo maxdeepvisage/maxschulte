@@ -1,7 +1,1 @@
-// src/pages/legal.js
-export default function Legal() {
-  const el = document.createElement('div');
-  el.className = 'page legal';
-  el.textContent = 'Legal';
-  return el;
-}
+export async function renderLegal(params = {}) { return `<div style="padding:4rem;text-align:center;font-family:monospace">legal</div>` }
