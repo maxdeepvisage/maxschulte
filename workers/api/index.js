@@ -27,22 +27,47 @@ export default {
           max_results: 500,
         })
 
-        // Extrai categorias únicas do asset_folder
+        // Agrupa por categoria e separa recursos que estão na raiz da categoria
         const categoriesMap = new Map()
         for (const r of data.resources || []) {
-          const folder = r.asset_folder // ex: "portfolio/portraits"
+          const folder = r.asset_folder || '' // ex: "portfolio/portraits" or "portfolio/portraits/bea"
           const parts = folder.split('/')
           if (parts.length < 2) continue
           const slug = parts[1]
           if (!categoriesMap.has(slug)) {
-            categoriesMap.set(slug, { slug, name: formatName(slug), cover: null })
+            categoriesMap.set(slug, { slug, name: formatName(slug), root: [], nested: [] })
           }
-          if (r.tags?.includes('cover') && !categoriesMap.get(slug).cover) {
-            categoriesMap.get(slug).cover = r.public_id
+
+          const entry = categoriesMap.get(slug)
+          // classifica como root se estiver diretamente em portfolio/<slug>
+          if (parts.length === 2) {
+            entry.root.push(r)
+          } else {
+            entry.nested.push(r)
           }
         }
 
-        return json([...categoriesMap.values()], cors)
+        // monta resultado priorizando covers na raiz da categoria
+        const results = []
+        for (const [slug, entry] of categoriesMap.entries()) {
+          let cover = null
+
+          // 1) procura tag 'cover' em root
+          cover = entry.root.find(r => r.tags?.includes('cover'))?.public_id || null
+
+          // 2) se não achou, procura tag 'cover' em nested
+          if (!cover) cover = entry.nested.find(r => r.tags?.includes('cover'))?.public_id || null
+
+          // 3) fallback: primeira imagem em root
+          if (!cover) cover = entry.root[0]?.public_id || null
+
+          // 4) fallback final: primeira imagem nested
+          if (!cover) cover = entry.nested[0]?.public_id || null
+
+          results.push({ slug, name: formatName(slug), cover })
+        }
+
+        return json(results, cors)
       }
 
       // GET /api/categories/:cat
