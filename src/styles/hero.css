@@ -175,12 +175,18 @@
   font-size: var(--font-size-sm);
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--color-text);
+  color: var(--color-bg);
+  background: var(--color-text);
+  border: none;
   padding: var(--space-sm) var(--space-xl);
-  transition: opacity var(--transition-base);
+  cursor: pointer;
+  transition: all var(--transition-base);
   opacity: 0;
   pointer-events: none;
-  position: relative;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .hero__enter-btn.visible {
@@ -188,42 +194,8 @@
   pointer-events: auto;
 }
 
-.hero__enter-btn::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: conic-gradient(
-    from var(--a, 0deg),
-    transparent 0deg,
-    transparent 300deg,
-    rgba(200, 169, 110, 0.9) 340deg,
-    transparent 360deg
-  );
-  animation: spin-border 2.5s linear infinite;
-  z-index: 0;
-}
-
-.hero__enter-btn::after {
-  content: '';
-  position: absolute;
-  inset: 1px;
-  background: #0a0a0a;
-  z-index: 1;
-}
-
-.hero__enter-btn span {
-  position: relative;
-  z-index: 2;
-}
-
-@property --a {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes spin-border {
-  to { --a: 360deg; }
+.hero__enter-btn:hover {
+  background: var(--color-accent);
 }
 
 @media (max-width: 767px) {

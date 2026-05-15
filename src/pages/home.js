@@ -33,7 +33,7 @@ export async function renderHome(params = {}) {
           <div class="lines-container"></div>
         </div>
         <div class="hero__enter">
-          <button class="hero__enter-btn" id="enterCategory"><span>View Work ↗</span></button>
+          <button class="hero__enter-btn" id="enterCategory">View Work ↗</button>
         </div>
         <div class="thumbs-container">
           <div class="slide-thumbs"></div>
