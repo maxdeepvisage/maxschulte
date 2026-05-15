@@ -10,17 +10,17 @@ import { renderAdminDashboard } from './pages/admin-dashboard.js'
 import { renderLegal } from './pages/legal.js'
 
 const routes = [
-  { path: '/',                          render: renderHome },
-  { path: '/categorias',                render: renderCategories },
-  { path: '/categorias/:cat',           render: renderEnsaios },
-  { path: '/categorias/:cat/:ensaio',   render: renderGaleria },
-  { path: '/videos',                    render: renderVideos },
-  { path: '/about',                     render: renderAbout },
-  { path: '/contact',                   render: renderContact },
-  { path: '/admin',                     render: renderAdminLogin },
-  { path: '/admin/dashboard',           render: renderAdminDashboard },
-  { path: '/privacidade',               render: () => renderLegal('privacidade') },
-  { path: '/termos',                    render: () => renderLegal('termos') },
+  { path: '/',                        render: renderHome },
+  { path: '/work',                    render: renderCategories },
+  { path: '/work/:cat',               render: renderEnsaios },
+  { path: '/work/:cat/:ensaio',       render: renderGaleria },
+  { path: '/videos',                  render: renderVideos },
+  { path: '/about',                   render: renderAbout },
+  { path: '/contact',                 render: renderContact },
+  { path: '/admin',                   render: renderAdminLogin },
+  { path: '/admin/dashboard',         render: renderAdminDashboard },
+  { path: '/privacy',                 render: () => renderLegal('privacy') },
+  { path: '/terms',                   render: () => renderLegal('terms') },
 ]
 
 function matchRoute(pathname) {
@@ -56,7 +56,7 @@ async function navigate(pathname) {
   const matched = matchRoute(pathname)
 
   if (!matched) {
-    app.innerHTML = '<div style="padding:4rem;text-align:center;font-family:monospace">404 — página não encontrada</div>'
+    app.innerHTML = '<div style="padding:4rem;text-align:center;font-family:monospace">404 — page not found</div>'
     return
   }
 
@@ -69,10 +69,8 @@ export function push(path) {
 }
 
 export function initRouter() {
-  // Navegação pelo botão voltar/avançar
   window.addEventListener('popstate', () => navigate(window.location.pathname))
 
-  // Intercepta cliques em links internos
   document.addEventListener('click', (e) => {
     const link = e.target.closest('[data-link]')
     if (!link) return
@@ -80,6 +78,5 @@ export function initRouter() {
     push(link.dataset.link)
   })
 
-  // Rota inicial
   navigate(window.location.pathname)
 }
