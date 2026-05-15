@@ -23,13 +23,8 @@ body {
   min-height: 100vh;
 }
 
-/* Garante que conteúdo não fica atrás da navbar */
-#app > div {
-  padding-top: 0;
-}
-
 .page-padded {
-  padding-top: calc(60px + var(--space-lg));
+  padding-top: var(--page-padding-top);
 }
 
 h1, h2, h3, h4 {
