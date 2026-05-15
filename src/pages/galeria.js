@@ -34,6 +34,15 @@ export async function renderGaleria(params = {}) {
       </aside>
 
       <div class="galeria-page">
+        <div class="mobile-album-nav">
+          ${ensaios.map(e => `
+            <button class="mobile-album-nav__item ${e.slug === ensaio ? 'active' : ''}"
+                    data-slug="${e.slug}">
+              ${e.name}
+            </button>
+          `).join('')}
+        </div>
+
         <header class="galeria-header">
           <h1 class="galeria-title">${ensaioName}</h1>
         </header>
@@ -132,4 +141,27 @@ function initGaleria(photos, ensaios, currentEnsaio, cat, ensaioName) {
   document.querySelector('.galeria-sidebar__cat')?.addEventListener('click', () => {
     push(`/work/${cat}`)
   })
+
+  // Mobile album navigation
+  document.querySelectorAll('.mobile-album-nav__item').forEach(item => {
+    item.addEventListener('click', () => push(`/work/${cat}/${item.dataset.slug}`))
+  })
+
+  // Swipe support
+  let touchStartX = 0
+  let touchStartY = 0
+
+  lightbox.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX
+    touchStartY = e.touches[0].clientY
+  }, { passive: true })
+
+  lightbox.addEventListener('touchend', e => {
+    if (!lightbox.classList.contains('open')) return
+    const dx = e.changedTouches[0].clientX - touchStartX
+    const dy = e.changedTouches[0].clientY - touchStartY
+    if (Math.abs(dx) < Math.abs(dy)) return // scroll vertical — ignora
+    if (Math.abs(dx) < 50) return // movimento muito pequeno — ignora
+    dx < 0 ? next() : prev()
+  }, { passive: true })
 }

@@ -14,27 +14,38 @@
   --font-display: 'TheGoodMonolith', monospace;
   --font-body:    'Inter', sans-serif;
 
-  --font-size-sm:   0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg:   1.25rem;
-  --font-size-xl:   1.5rem;
-  --font-size-2xl:  2rem;
-  --font-size-3xl:  3rem;
-  --font-size-hero: clamp(2.5rem, 6vw, 5rem);
+  --font-size-xs:   0.6875rem;  /* 11px */
+  --font-size-sm:   0.75rem;    /* 12px */
+  --font-size-base: 0.875rem;   /* 14px */
+  --font-size-lg:   1.125rem;   /* 18px */
+  --font-size-xl:   1.25rem;    /* 20px */
+  --font-size-2xl:  1.5rem;     /* 24px */
+  --font-size-3xl:  1.75rem;    /* 28px */
+  --font-size-hero: clamp(1.5rem, 8vw, 2rem);
 
-  /* Espaçamentos */
-  --space-xs:      0.5rem;
-  --space-sm:      1rem;
-  --space-md:      1.5rem;
-  --space-lg:      2rem;
-  --space-xl:      3rem;
-  --space-2xl:     5rem;
-  --space-section: clamp(4rem, 8vw, 8rem);
+  /* Letter spacing mobile */
+  --ls-wide:   0.15em;
+  --ls-wider:  0.2em;
+  --ls-widest: 0.25em;
+
+  /* Espaçamentos mobile */
+  --space-xs:      0.25rem;
+  --space-sm:      0.5rem;
+  --space-md:      0.75rem;
+  --space-lg:      1rem;
+  --space-xl:      1.5rem;
+  --space-2xl:     2.5rem;
+  --space-section: clamp(1.5rem, 4vw, 3rem);
+
+  /* Safe area */
+  --safe-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+  --safe-left:   max(var(--space-sm), env(safe-area-inset-left));
+  --safe-right:  max(var(--space-sm), env(safe-area-inset-right));
 
   /* Slideshow */
-  --thumb-width:      120px;
-  --line-base-height: 15px;
-  --line-max-height:  50px;
+  --thumb-width:      80px;
+  --line-base-height: 10px;
+  --line-max-height:  35px;
 
   /* Transições */
   --transition-fast:   150ms ease;
@@ -47,4 +58,42 @@
   --z-overlay:  200;
   --z-lightbox: 300;
   --z-toast:    400;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  :root {
+    --font-size-xs:   0.75rem;   /* 12px */
+    --font-size-sm:   0.875rem;  /* 14px */
+    --font-size-base: 1rem;      /* 16px */
+    --font-size-lg:   1.25rem;   /* 20px */
+    --font-size-xl:   1.5rem;    /* 24px */
+    --font-size-2xl:  2rem;      /* 32px */
+    --font-size-3xl:  3rem;      /* 48px */
+    --font-size-hero: clamp(2.5rem, 6vw, 5rem);
+
+    --ls-wide:   0.2em;
+    --ls-wider:  0.25em;
+    --ls-widest: 0.3em;
+
+    --space-xs:      0.5rem;
+    --space-sm:      1rem;
+    --space-md:      1.5rem;
+    --space-lg:      2rem;
+    --space-xl:      3rem;
+    --space-2xl:     5rem;
+    --space-section: clamp(4rem, 8vw, 8rem);
+
+    --thumb-width:      120px;
+    --line-base-height: 15px;
+    --line-max-height:  50px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  :root {
+    --font-size-3xl:  3rem;
+    --font-size-hero: clamp(3rem, 6vw, 5rem);
+  }
 }
