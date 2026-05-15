@@ -32,13 +32,12 @@ export async function renderHome(params = {}) {
         <div class="drag-indicator">
           <div class="lines-container"></div>
         </div>
+        <div class="hero__enter">
+          <button class="hero__enter-btn" id="enterCategory"><span>View Work ↗</span></button>
+        </div>
         <div class="thumbs-container">
           <div class="slide-thumbs"></div>
         </div>
-      </div>
-
-      <div class="hero__enter">
-        <button class="hero__enter-btn" id="enterCategory">View Work ↗</button>
       </div>
 
       <div class="hero__scroll-hint">scroll or drag</div>

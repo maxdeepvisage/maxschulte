@@ -164,11 +164,10 @@
 
 /* Enter button */
 .hero__enter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: var(--z-nav);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
 }
 
 .hero__enter-btn {
@@ -177,13 +176,11 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--color-text);
-  border: 1px solid var(--color-border);
   padding: var(--space-sm) var(--space-xl);
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
-  transition: all var(--transition-base);
+  transition: opacity var(--transition-base);
   opacity: 0;
   pointer-events: none;
+  position: relative;
 }
 
 .hero__enter-btn.visible {
@@ -191,9 +188,42 @@
   pointer-events: auto;
 }
 
-.hero__enter-btn:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: rgba(255,255,255,0.2);
+.hero__enter-btn::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: conic-gradient(
+    from var(--a, 0deg),
+    transparent 0deg,
+    transparent 300deg,
+    rgba(200, 169, 110, 0.9) 340deg,
+    transparent 360deg
+  );
+  animation: spin-border 2.5s linear infinite;
+  z-index: 0;
+}
+
+.hero__enter-btn::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: #0a0a0a;
+  z-index: 1;
+}
+
+.hero__enter-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+@property --a {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spin-border {
+  to { --a: 360deg; }
 }
 
 @media (max-width: 767px) {
