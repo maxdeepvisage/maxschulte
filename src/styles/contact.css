@@ -39,7 +39,7 @@
   font-size: var(--font-size-lg);
   color: var(--color-text-muted);
   line-height: 1.7;
-  margin-top: var(--space-xl);
+  margin-top: var(--space-2xl);
   margin-bottom: var(--space-lg);
   grid-column: 2;
   grid-row: 1;
