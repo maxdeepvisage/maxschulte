@@ -30,9 +30,6 @@ export async function renderHome(params = {}) {
         <div class="hero__title-container slide-title-container">
           <div class="slide-title hero__title">${categories[0]?.name || ''}</div>
         </div>
-        <div class="drag-indicator">
-          <div class="lines-container"></div>
-        </div>
         <div class="thumbs-container">
           <div class="slide-thumbs"></div>
         </div>
@@ -41,8 +38,6 @@ export async function renderHome(params = {}) {
       <div class="hero__enter">
         <button class="hero__enter-btn" id="enterCategory">View Work ↗</button>
       </div>
-
-      <div class="hero__scroll-hint">scroll or drag</div>
     </div>
   `
 

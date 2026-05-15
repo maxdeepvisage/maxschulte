@@ -40,49 +40,6 @@ function updateSlideTitle(index, titles) {
   setTimeout(() => current.remove(), 500)
 }
 
-function updateDragLines(activeIndex, slideCount, forceUpdate = false) {
-  const lines = document.querySelectorAll('.drag-line')
-  if (!lines.length) return
-
-  lines.forEach(line => {
-    line.style.height = 'var(--line-base-height)'
-    line.style.backgroundColor = 'rgba(255,255,255,0.2)'
-  })
-
-  if (activeIndex === null) return
-
-  const lineCount    = lines.length
-  const thumbWidth   = 720 / slideCount
-  const centerPos    = (activeIndex + 0.5) * thumbWidth
-  const lineWidth    = 720 / lineCount
-
-  for (let i = 0; i < lineCount; i++) {
-    const linePos  = (i + 0.5) * lineWidth
-    const dist     = Math.abs(linePos - centerPos)
-    const maxDist  = thumbWidth * 0.7
-    if (dist > maxDist) continue
-
-    const norm      = dist / maxDist
-    const wave      = Math.cos((norm * Math.PI) / 2)
-    const baseH     = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--line-base-height'))
-    const height    = baseH + wave * 35
-    const opacity   = 0.2 + wave * 0.5
-    const delay     = norm * 100
-
-    if (forceUpdate) {
-      lines[i].style.height = `${height}px`
-      lines[i].style.backgroundColor = `rgba(255,255,255,${opacity})`
-    } else {
-      setTimeout(() => {
-        if (currentHoveredThumb === activeIndex || (mouseOverThumbnails && lastHoveredThumbIndex === activeIndex)) {
-          lines[i].style.height = `${height}px`
-          lines[i].style.backgroundColor = `rgba(255,255,255,${opacity})`
-        }
-      }, delay)
-    }
-  }
-}
-
 class Slideshow {
   constructor(el, categories, onSlideChange) {
     this.el         = el
@@ -110,7 +67,6 @@ class Slideshow {
     document.querySelectorAll('.slide-thumb').forEach((t, i) => t.classList.toggle('active', i === index))
     updateSlideCounter(index)
     updateSlideTitle(index, this.titles)
-    updateDragLines(index, this.total, true)
     this.onChange?.(this.categories[index])
 
     this._animate(prev, index, index > prev ? 1 : -1)
@@ -130,7 +86,6 @@ class Slideshow {
     document.querySelectorAll('.slide-thumb').forEach((t, i) => t.classList.toggle('active', i === this.current))
     updateSlideCounter(this.current)
     updateSlideTitle(this.current, this.titles)
-    updateDragLines(this.current, this.total, true)
     this.onChange?.(this.categories[this.current])
 
     this._animate(prev, this.current, dir)
@@ -164,7 +119,6 @@ class Slideshow {
 
         if (mouseOverThumbnails && lastHoveredThumbIndex !== null) {
           currentHoveredThumb = lastHoveredThumbIndex
-          updateDragLines(lastHoveredThumbIndex, this.total, true)
         }
       }
     })
@@ -218,7 +172,6 @@ export function initSlideshow(categories) {
       thumb.addEventListener('click', () => { lastHoveredThumbIndex = i; slideshow.goTo(i) })
       thumb.addEventListener('mouseenter', () => {
         currentHoveredThumb = i; lastHoveredThumbIndex = i; mouseOverThumbnails = true
-        if (!isAnimating) updateDragLines(i, categories.length, true)
       })
       thumb.addEventListener('mouseleave', () => {
         if (currentHoveredThumb === i) currentHoveredThumb = null
@@ -226,17 +179,6 @@ export function initSlideshow(categories) {
 
       thumbsContainer.appendChild(thumb)
     })
-  }
-
-  // Drag lines
-  const linesContainer = document.querySelector('.lines-container')
-  if (linesContainer) {
-    linesContainer.innerHTML = ''
-    for (let i = 0; i < 60; i++) {
-      const line = document.createElement('div')
-      line.className = 'drag-line'
-      linesContainer.appendChild(line)
-    }
   }
 
   // Enter button
@@ -254,7 +196,6 @@ export function initSlideshow(categories) {
   document.querySelector('.next-slide')?.addEventListener('click', () => slideshow.next())
 
   updateSlideCounter(0)
-  updateDragLines(0, categories.length, true)
 
   // Thumbs area mouse leave
   const thumbsArea = document.querySelector('.thumbs-container')
@@ -263,7 +204,6 @@ export function initSlideshow(categories) {
     thumbsArea.addEventListener('mouseleave', () => {
       mouseOverThumbnails = false
       currentHoveredThumb = null
-      updateDragLines(null, categories.length)
     })
   }
 
