@@ -1,0 +1,121 @@
+:root {
+  /* reuse project variables */
+}
+
+.galeria-header {
+  padding: calc(var(--space-lg) * 2) var(--space-lg);
+}
+
+.galeria-breadcrumb {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+}
+
+.galeria-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  margin: 0 0 var(--space-md) 0;
+}
+
+.galeria-main {
+  padding: var(--space-lg);
+  max-width: 1400px;
+  margin: 0 auto 6rem;
+}
+
+/* Masonry layout using CSS columns */
+.masonry {
+  column-gap: var(--space-md);
+  column-count: 3;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: var(--space-md);
+  background: var(--color-bg);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.masonry-item:hover img {
+  transform: scale(1.02);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 9999;
+}
+
+.lightbox.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox__stage {
+  max-width: 92vw;
+  max-height: 86vh;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 86vh;
+  display: block;
+  object-fit: contain;
+}
+
+.lightbox__close {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.lightbox__nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.lightbox__nav.prev { left: 12px }
+.lightbox__nav.next { right: 12px }
+
+/* Responsive columns */
+@media (max-width: 1100px) {
+  .masonry { column-count: 2 }
+}
+
+@media (max-width: 640px) {
+  .masonry { column-count: 1 }
+  .galeria-header { padding: var(--space-lg) }
+  .galeria-title { font-size: var(--font-size-xl) }
+}
