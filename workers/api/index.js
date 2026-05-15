@@ -21,14 +21,12 @@ export default {
 
         const result = await Promise.all(categories.map(async f => {
           const resources = await cloudinaryGet(env,
-            `resources/image?prefix=portfolio/${f.name}/&type=upload&max_results=50&tags=true`
+            `resources/image?prefix=portfolio/${f.name}/&type=upload&max_results=50`
           )
 
           const cover = (resources.resources || []).find(r =>
-            r.tags?.includes('cover')
-          ) || (resources.resources || [])[0]
-
-          console.log(`[${f.name}] found ${(resources.resources || []).length} images, cover:`, cover?.public_id)
+            r.public_id === `portfolio/${f.name}/cover`
+          )
 
           return {
             slug: f.name,
