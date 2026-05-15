@@ -61,10 +61,10 @@ async function navigate(pathname) {
   }
 
   // Fade out
-  app.style.transition = 'opacity 0.3s ease'
+  app.style.transition = 'opacity 0.18s ease'
   app.style.opacity = '0'
 
-  await new Promise(r => setTimeout(r, 300))
+  await new Promise(r => setTimeout(r, 180))
 
   app.innerHTML = await matched.render(matched.params)
 

@@ -154,11 +154,29 @@ export function initSlideshow(categories) {
 
   let currentCategory = categories[0]
 
+  // Lazy load background images
+  const lazyLoadSlide = (index) => {
+    const slide = document.querySelectorAll('.slide')[index]
+    const img   = slide?.querySelector('.slide__img')
+    if (!img || img.style.backgroundImage) return
+    img.style.backgroundImage = `url(${slide.dataset.bg})`
+  }
+
   const slideshow = new Slideshow(slidesEl, categories, (cat) => {
     currentCategory = cat
     const btn = document.querySelector('#enterCategory')
     if (btn) btn.dataset.slug = cat.slug
   })
+
+  // Precarrega próximo slide ao navegar
+  const originalNavigate = slideshow.navigate.bind(slideshow)
+  slideshow.navigate = (dir) => {
+    const next = dir === 1
+      ? (slideshow.current < slideshow.total - 1 ? slideshow.current + 1 : 0)
+      : (slideshow.current > 0 ? slideshow.current - 1 : slideshow.total - 1)
+    lazyLoadSlide(next)
+    originalNavigate(dir)
+  }
 
   // Thumbnails
   const thumbsContainer = document.querySelector('.slide-thumbs')

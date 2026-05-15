@@ -46,8 +46,7 @@ export async function renderEnsaios(params = {}) {
             ${ensaios.map((e, i) => `
               <button class="ensaios-tab ${i === 0 ? 'active' : ''}"
                       data-index="${i}"
-                      data-slug="${e.slug}"
-                      style="--bg-image: url(${imageUrl(e.cover, 'thumb')})">
+                      data-slug="${e.slug}">
                 <span class="ensaios-tab__name">${e.name}</span>
               </button>
             `).join('')}
@@ -72,7 +71,6 @@ function initEnsaios(ensaios, cat) {
   const slides  = document.querySelectorAll('.ensaios-image__slide')
   const tabs    = document.querySelectorAll('.ensaios-tab')
   const title   = document.querySelector('.ensaios-info__title')
-  const album   = document.querySelector('.ensaios-info__album')
   const cta     = document.querySelector('.ensaios-info__cta')
   const catLink = document.querySelector('.ensaios-info__cat span')
 
@@ -88,13 +86,12 @@ function initEnsaios(ensaios, cat) {
     gsap.to(slides[index],   { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.1 })
 
     // Texto fadeUp
-    gsap.to([title, album], {
+    gsap.to(title, {
       opacity: 0, y: 10, duration: 0.2, ease: 'power2.in',
       onComplete: () => {
         title.textContent = ensaios[index].name
-        album.textContent = ensaios[index].name
         cta.dataset.slug  = ensaios[index].slug
-        gsap.fromTo([title, album],
+        gsap.fromTo(title,
           { opacity: 0, y: 14 },
           { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out',
             onComplete: () => { animating = false }
