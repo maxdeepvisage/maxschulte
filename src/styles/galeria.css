@@ -1,9 +1,10 @@
-:root {
-  /* reuse project variables */
+.galeria-page {
+  min-height: 100vh;
+  padding-bottom: var(--space-2xl);
 }
 
 .galeria-header {
-  padding: calc(var(--space-lg) * 2) var(--space-lg);
+  padding: calc(var(--space-2xl) + 60px) var(--space-lg) var(--space-lg);
 }
 
 .galeria-breadcrumb {
@@ -12,45 +13,53 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-bottom: var(--space-sm);
+  cursor: pointer;
+  display: inline-block;
+  transition: color var(--transition-fast);
+}
+
+.galeria-breadcrumb:hover {
+  color: var(--color-text);
 }
 
 .galeria-title {
   font-family: var(--font-display);
-  font-size: var(--font-size-2xl);
-  margin: 0 0 var(--space-md) 0;
+  font-size: var(--font-size-3xl);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .galeria-main {
-  padding: var(--space-lg);
-  max-width: 1400px;
-  margin: 0 auto 6rem;
+  padding: 0 var(--space-lg);
+  max-width: 1600px;
+  margin: 0 auto var(--space-2xl);
 }
 
-/* Masonry layout using CSS columns */
+/* Masonry 4 colunas */
 .masonry {
-  column-gap: var(--space-md);
-  column-count: 3;
+  column-count: 4;
+  column-gap: var(--space-sm);
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: var(--space-md);
-  background: var(--color-bg);
-  border-radius: 6px;
+  margin-bottom: var(--space-sm);
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  cursor: pointer;
 }
 
 .masonry-item img {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: cover;
-  transition: transform 0.35s ease;
+  transition: transform 0.5s ease, filter 0.5s ease;
+  filter: brightness(0.95);
 }
 
 .masonry-item:hover img {
-  transform: scale(1.02);
+  transform: scale(1.03);
+  filter: brightness(1);
 }
 
 /* Lightbox */
@@ -59,11 +68,11 @@
   inset: 0;
   display: grid;
   place-items: center;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0, 0, 0, 0.92);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
-  z-index: 9999;
+  z-index: var(--z-lightbox);
 }
 
 .lightbox.open {
@@ -72,50 +81,84 @@
 }
 
 .lightbox__stage {
-  max-width: 92vw;
-  max-height: 86vh;
+  max-width: 90vw;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .lightbox__img {
   max-width: 100%;
-  max-height: 86vh;
-  display: block;
+  max-height: 88vh;
   object-fit: contain;
+  display: block;
 }
 
 .lightbox__close {
   position: fixed;
-  top: 24px;
-  right: 24px;
+  top: var(--space-lg);
+  right: var(--space-lg);
   background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 20px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
   cursor: pointer;
+  transition: border-color var(--transition-fast);
+  display: grid;
+  place-items: center;
+}
+
+.lightbox__close:hover {
+  border-color: var(--color-text);
 }
 
 .lightbox__nav {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.4);
-  border: none;
-  color: #fff;
-  font-size: 22px;
-  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
   cursor: pointer;
+  transition: border-color var(--transition-fast);
+  display: grid;
+  place-items: center;
 }
 
-.lightbox__nav.prev { left: 12px }
-.lightbox__nav.next { right: 12px }
+.lightbox__nav:hover {
+  border-color: var(--color-text);
+}
 
-/* Responsive columns */
+.lightbox__nav.prev { left: var(--space-lg); }
+.lightbox__nav.next { right: var(--space-lg); }
+
+.lightbox__counter {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
 @media (max-width: 1100px) {
-  .masonry { column-count: 2 }
+  .masonry { column-count: 3; }
 }
 
-@media (max-width: 640px) {
-  .masonry { column-count: 1 }
-  .galeria-header { padding: var(--space-lg) }
-  .galeria-title { font-size: var(--font-size-xl) }
+@media (max-width: 768px) {
+  .masonry { column-count: 2; }
+  .galeria-title { font-size: var(--font-size-2xl); }
+}
+
+@media (max-width: 480px) {
+  .masonry { column-count: 1; }
 }
