@@ -12,6 +12,10 @@ export default {
       return new Response(null, { headers: cors })
     }
 
+    if (request.method !== 'GET') {
+      return new Response('Method not allowed', { status: 405, headers: cors })
+    }
+
     const path = url.pathname
 
     try {
@@ -104,7 +108,7 @@ export default {
       return new Response('Not found', { status: 404, headers: cors })
 
     } catch (err) {
-      return new Response(JSON.stringify({ error: err.message }), {
+      return new Response(JSON.stringify({ error: 'Internal server error' }), {
         status: 500,
         headers: { ...cors, 'Content-Type': 'application/json' }
       })
