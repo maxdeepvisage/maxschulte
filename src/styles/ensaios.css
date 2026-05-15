@@ -10,7 +10,7 @@
   height: 100%;
 }
 
-/* Lado esquerdo — imagem */
+/* Esquerda — imagem */
 .ensaios-image {
   position: relative;
   overflow: hidden;
@@ -22,14 +22,13 @@
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: none;
 }
 
 .ensaios-image__slide.active {
   opacity: 1;
 }
 
-/* Lado direito — conteúdo */
+/* Direita — conteúdo */
 .ensaios-content {
   display: flex;
   flex-direction: column;
@@ -46,12 +45,26 @@
   gap: var(--space-md);
 }
 
+.ensaios-info__cat {
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.ensaios-info__cat:hover {
+  color: var(--color-text);
+}
+
 .ensaios-info__sub {
   font-family: var(--font-display);
   font-size: var(--font-size-sm);
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-accent);
 }
 
 .ensaios-info__title {
@@ -61,6 +74,7 @@
   text-transform: uppercase;
   color: var(--color-text);
   line-height: 1;
+  margin: 0;
 }
 
 .ensaios-info__cta {
@@ -88,17 +102,18 @@
   gap: var(--space-lg);
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-md);
+  overflow-x: auto;
 }
 
 .ensaios-tab {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 6px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
-  text-align: left;
+  flex-shrink: 0;
 }
 
 .ensaios-tab__name {
@@ -135,7 +150,7 @@
 @media (max-width: 768px) {
   .ensaios-split {
     grid-template-columns: 1fr;
-    grid-template-rows: 40vh 1fr;
+    grid-template-rows: 45vh 1fr;
   }
 
   .ensaios-content {
@@ -143,13 +158,7 @@
     overflow-y: auto;
   }
 
-  .ensaios-tabs {
-    overflow-x: auto;
-    padding-bottom: var(--space-sm);
-    flex-wrap: nowrap;
-  }
-
-  .ensaios-tab {
-    flex-shrink: 0;
+  .ensaios-info__title {
+    font-size: var(--font-size-2xl);
   }
 }

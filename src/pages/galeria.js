@@ -1,9 +1,13 @@
-import { getPhotos, imageUrl } from '../services/cloudinary.js'
+import { getPhotos, getEnsaios, imageUrl } from '../services/cloudinary.js'
 import { push } from '../router.js'
 
 export async function renderGaleria(params = {}) {
   const { cat, ensaio } = params
-  const photos = await getPhotos(cat, ensaio)
+
+  const [photos, ensaios] = await Promise.all([
+    getPhotos(cat, ensaio),
+    getEnsaios(cat),
+  ])
 
   if (!photos || !photos.length) {
     return `<div class="empty-page" style="padding:4rem;text-align:center">No photos found.</div>`
@@ -11,32 +15,44 @@ export async function renderGaleria(params = {}) {
 
   photos.sort((a, b) => (a.order || 999) - (b.order || 999))
 
-  const catName = cat.replace(/-/g, ' ').toUpperCase()
+  const catName    = cat.replace(/-/g, ' ').toUpperCase()
   const ensaioName = ensaio.charAt(0).toUpperCase() + ensaio.slice(1)
 
   const html = `
-    <div class="galeria-page">
-      <header class="galeria-header">
-        <div class="galeria-breadcrumb" data-link="/work/${cat}">
-          ← ${catName}
-        </div>
-        <h1 class="galeria-title">${ensaioName}</h1>
-      </header>
+    <div class="galeria-wrap">
 
-      <main class="galeria-main">
-        <div class="masonry">
-          ${photos.map((p, i) => `
-            <div class="masonry-item" data-index="${i}">
-              <img
-                loading="lazy"
-                alt="${ensaioName} ${i + 1}"
-                src="${imageUrl(p.publicId, 'grid')}"
-                data-full="${imageUrl(p.publicId, 'lightbox')}"
-              />
-            </div>
+      <aside class="galeria-sidebar">
+        <div class="galeria-sidebar__cat" data-link="/work/${cat}">← ${catName}</div>
+        <div class="galeria-sidebar__list">
+          ${ensaios.map(e => `
+            <button class="galeria-sidebar__item ${e.slug === ensaio ? 'active' : ''}"
+                    data-slug="${e.slug}">
+              ${e.name}
+            </button>
           `).join('')}
         </div>
-      </main>
+      </aside>
+
+      <div class="galeria-page">
+        <header class="galeria-header">
+          <h1 class="galeria-title">${ensaioName}</h1>
+        </header>
+
+        <main class="galeria-main">
+          <div class="masonry">
+            ${photos.map((p, i) => `
+              <div class="masonry-item" data-index="${i}">
+                <img
+                  loading="lazy"
+                  alt="${ensaioName} ${i + 1}"
+                  src="${imageUrl(p.publicId, 'grid')}"
+                  data-full="${imageUrl(p.publicId, 'lightbox')}"
+                />
+              </div>
+            `).join('')}
+          </div>
+        </main>
+      </div>
 
       <div class="lightbox" aria-hidden="true">
         <button class="lightbox__close" aria-label="Close">✕</button>
@@ -49,15 +65,16 @@ export async function renderGaleria(params = {}) {
           <span class="lightbox__current">1</span> // <span class="lightbox__total">${photos.length}</span>
         </div>
       </div>
+
     </div>
   `
 
-  requestAnimationFrame(() => requestAnimationFrame(() => initGaleria(photos, ensaioName)))
+  requestAnimationFrame(() => requestAnimationFrame(() => initGaleria(photos, ensaios, ensaio, cat, ensaioName)))
 
   return html
 }
 
-function initGaleria(photos, ensaioName) {
+function initGaleria(photos, ensaios, currentEnsaio, cat, ensaioName) {
   const items    = document.querySelectorAll('.masonry-item')
   const lightbox = document.querySelector('.lightbox')
   const lbImg    = document.querySelector('.lightbox__img')
@@ -105,5 +122,14 @@ function initGaleria(photos, ensaioName) {
     if (e.key === 'Escape') close()
     if (e.key === 'ArrowRight') next()
     if (e.key === 'ArrowLeft') prev()
+  })
+
+  // Sidebar navigation
+  document.querySelectorAll('.galeria-sidebar__item').forEach(item => {
+    item.addEventListener('click', () => push(`/work/${cat}/${item.dataset.slug}`))
+  })
+
+  document.querySelector('.galeria-sidebar__cat')?.addEventListener('click', () => {
+    push(`/work/${cat}`)
   })
 }

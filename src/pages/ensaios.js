@@ -7,13 +7,18 @@ export async function renderEnsaios(params = {}) {
   const ensaios = await getEnsaios(cat)
 
   if (!ensaios.length) {
-    return `<div class="empty-page">No albums found.</div>`
+    return `<div class="empty-page" style="padding:4rem;text-align:center">No albums found.</div>`
   }
+
+  const catName = cat.replace(/-/g, ' ').toUpperCase()
+  const first = ensaios[0]
 
   const html = `
     <div class="ensaios-page">
+
       <div class="ensaios-split">
 
+        <!-- Esquerda: imagem -->
         <div class="ensaios-image">
           ${ensaios.map((e, i) => `
             <div class="ensaios-image__slide ${i === 0 ? 'active' : ''}"
@@ -22,24 +27,30 @@ export async function renderEnsaios(params = {}) {
           `).join('')}
         </div>
 
+        <!-- Direita: conteúdo -->
         <div class="ensaios-content">
+
           <div class="ensaios-info">
-            <p class="ensaios-info__sub">${cat} — <span class="ensaios-info__album">${ensaios[0].name}</span></p>
-            <h1 class="ensaios-info__title">${ensaios[0].name}</h1>
-            <button class="ensaios-info__cta" data-slug="${ensaios[0].slug}">View Series ↗</button>
+            <p class="ensaios-info__cat">← <span data-link="/work">${catName}</span></p>
+            <p class="ensaios-info__sub"><span class="ensaios-info__album">${first.name}</span></p>
+            <h1 class="ensaios-info__title">${first.name}</h1>
+            <button class="ensaios-info__cta" data-slug="${first.slug}">View Series ↗</button>
           </div>
 
           <div class="ensaios-tabs">
             ${ensaios.map((e, i) => `
-              <button class="ensaios-tab ${i === 0 ? 'active' : ''}" data-index="${i}" data-slug="${e.slug}">
+              <button class="ensaios-tab ${i === 0 ? 'active' : ''}"
+                      data-index="${i}"
+                      data-slug="${e.slug}">
                 <span class="ensaios-tab__name">${e.name}</span>
                 <span class="ensaios-tab__line"></span>
               </button>
             `).join('')}
           </div>
-        </div>
 
+        </div>
       </div>
+
     </div>
   `
 
@@ -56,33 +67,40 @@ function initEnsaios(ensaios, cat) {
   const slides  = document.querySelectorAll('.ensaios-image__slide')
   const tabs    = document.querySelectorAll('.ensaios-tab')
   const title   = document.querySelector('.ensaios-info__title')
-  const sub     = document.querySelector('.ensaios-info__album')
+  const album   = document.querySelector('.ensaios-info__album')
   const cta     = document.querySelector('.ensaios-info__cta')
+  const catLink = document.querySelector('.ensaios-info__cat span')
 
   let current = 0
+  let animating = false
 
   function goTo(index) {
-    if (index === current) return
+    if (index === current || animating) return
+    animating = true
 
-    // Imagem — crossfade
-    gsap.to(slides[current], { opacity: 0, duration: 0.4, ease: 'power2.out' })
-    gsap.to(slides[index],   { opacity: 1, duration: 0.4, ease: 'power2.out', delay: 0.1 })
+    // Imagem crossfade
+    gsap.to(slides[current], { opacity: 0, duration: 0.5, ease: 'power2.out' })
+    gsap.to(slides[index],   { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.1 })
 
-    // Texto — fadeUp
-    gsap.fromTo([title, sub], 
-      { opacity: 0, y: 12 },
-      { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: 0.15 }
-    )
+    // Texto fadeUp
+    gsap.to([title, album], {
+      opacity: 0, y: 10, duration: 0.2, ease: 'power2.in',
+      onComplete: () => {
+        title.textContent = ensaios[index].name
+        album.textContent = ensaios[index].name
+        cta.dataset.slug  = ensaios[index].slug
+        gsap.fromTo([title, album],
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out',
+            onComplete: () => { animating = false }
+          }
+        )
+      }
+    })
 
     // Tabs
     tabs[current].classList.remove('active')
     tabs[index].classList.add('active')
-
-    // Atualiza conteúdo
-    title.textContent = ensaios[index].name
-    sub.textContent   = ensaios[index].name
-    cta.dataset.slug  = ensaios[index].slug
-
     current = index
   }
 
@@ -93,4 +111,6 @@ function initEnsaios(ensaios, cat) {
   cta.addEventListener('click', () => {
     push(`/work/${cat}/${cta.dataset.slug}`)
   })
+
+  catLink?.addEventListener('click', () => push('/work'))
 }
