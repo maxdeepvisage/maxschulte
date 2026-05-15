@@ -8,9 +8,8 @@ export async function renderHome(params = {}) {
     <div class="hero">
       <div class="slides">
         ${categories.map((cat, i) => `
-          <div class="slide" data-index="${i}" data-slug="${cat.slug}"
-               data-bg="${imageUrl(cat.cover, 'hero')}">
-            <div class="slide__img" ${i === 0 ? `style="background-image: url(${imageUrl(cat.cover, 'hero')})"` : ''}></div>
+          <div class="slide" data-index="${i}" data-slug="${cat.slug}">
+            <div class="slide__img" style="background-image: url(${imageUrl(cat.cover, 'hero')})"></div>
             <div class="slide__overlay"></div>
           </div>
         `).join('')}
