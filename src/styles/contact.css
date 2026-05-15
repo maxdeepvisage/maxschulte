@@ -22,6 +22,7 @@
   color: var(--color-accent);
   margin-bottom: var(--space-sm);
   grid-column: 1;
+  grid-row: 1;
 }
 
 .contact-title {
@@ -31,18 +32,18 @@
   text-transform: uppercase;
   color: var(--color-text);
   line-height: 1;
-  margin-bottom: 0;
+  margin-bottom: var(--space-md);
   grid-column: 1;
+  grid-row: 2;
 }
 
 .contact-sub {
   font-size: var(--font-size-lg);
   color: var(--color-text-muted);
   line-height: 1.7;
-  margin-bottom: var(--space-lg);
-  grid-column: 2;
-  grid-row: 2;
-  align-self: start;
+  margin-bottom: 0;
+  grid-column: 1;
+  grid-row: 3;
 }
 
 /* Actions */
@@ -51,7 +52,8 @@
   flex-direction: column;
   gap: var(--space-lg);
   grid-column: 2;
-  grid-row: 3;
+  grid-row: 1 / 4;
+  align-self: start;
 }
 
 .contact-primary {
@@ -138,11 +140,13 @@
 
   .contact-label {
     grid-column: 1;
+    grid-row: auto;
   }
 
   .contact-title {
     font-size: clamp(2.5rem, 12vw, 4rem);
     grid-column: 1;
+    grid-row: auto;
   }
 
   .contact-sub {
@@ -154,6 +158,7 @@
   .contact-actions {
     grid-column: 1;
     grid-row: auto;
+    margin-top: var(--space-lg);
   }
 
   .contact-primary {
