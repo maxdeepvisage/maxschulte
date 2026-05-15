@@ -60,7 +60,19 @@ async function navigate(pathname) {
     return
   }
 
+  // Fade out
+  app.style.transition = 'opacity 0.3s ease'
+  app.style.opacity = '0'
+
+  await new Promise(r => setTimeout(r, 300))
+
   app.innerHTML = await matched.render(matched.params)
+
+  // Fade in
+  app.style.opacity = '0'
+  requestAnimationFrame(() => {
+    app.style.opacity = '1'
+  })
 }
 
 export function push(path) {

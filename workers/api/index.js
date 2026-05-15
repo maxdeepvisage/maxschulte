@@ -78,9 +78,8 @@ export default {
 
         const ensaiosMap = new Map()
         for (const r of data.resources || []) {
-          const folder = r.asset_folder // ex: "portfolio/portraits/bea"
-          const parts = folder.split('/')
-          if (parts.length < 3) continue
+          const parts = r.asset_folder.split('/')
+          if (parts.length !== 3) continue
           const slug = parts[2]
           if (!ensaiosMap.has(slug)) {
             ensaiosMap.set(slug, { slug, name: formatName(slug), cover: null })
@@ -90,15 +89,10 @@ export default {
           }
         }
 
-        // Se ensaio não tem cover, usa primeira foto
-        const data2 = await cloudinarySearch(env, {
-          expression: `asset_folder:portfolio/${cat}/*`,
-          with_field: ['tags'],
-          max_results: 500,
-        })
-        for (const r of data2.resources || []) {
+        // fallback cover — reusa data já carregado
+        for (const r of data.resources || []) {
           const parts = r.asset_folder.split('/')
-          if (parts.length < 3) continue
+          if (parts.length !== 3) continue
           const slug = parts[2]
           const ensaio = ensaiosMap.get(slug)
           if (ensaio && !ensaio.cover) ensaio.cover = r.public_id
@@ -112,7 +106,7 @@ export default {
       if (photosMatch) {
         const [, cat, ensaio] = photosMatch
         const data = await cloudinarySearch(env, {
-          expression: `asset_folder:portfolio/${cat}/${ensaio} NOT tags:hidden`,
+          expression: `asset_folder="portfolio/${cat}/${ensaio}" AND NOT tags:hidden`,
           with_field: ['tags', 'context'],
           max_results: 500,
         })
