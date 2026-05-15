@@ -1,5 +1,5 @@
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-const API_URL    = 'https://maxschulte-api.maxwschulte.workers.dev'
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dxwnh6a6r'
+const API_URL    = import.meta.env.VITE_API_URL || 'https://maxschulte-api.maxwschulte.workers.dev'
 
 const TRANSFORMS = {
   thumb:    'w_600,h_400,c_fill,q_auto,f_webp',
