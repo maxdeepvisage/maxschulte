@@ -29,11 +29,11 @@ export default {
     try {
       // GET /api/categories
       if (path === '/api/categories') {
-        const data = await cloudinarySearch(env, {
+        const data = await cachedSearch(env, 'cache:categories', {
           expression: 'asset_folder:portfolio/*',
           with_field: ['tags'],
           max_results: 500,
-        })
+        }, 300)
 
         // Agrupa por categoria e separa recursos que estão na raiz da categoria
         const categoriesMap = new Map()
@@ -72,18 +72,18 @@ export default {
           results.push({ slug, name: formatName(slug), cover })
         }
 
-        return json(results, cors)
+        return json(results, cors, 300) // Categories — cache 5 min
       }
 
       // GET /api/categories/:cat
       const ensaiosMatch = path.match(/^\/api\/categories\/([^/]+)$/)
       if (ensaiosMatch) {
         const cat = ensaiosMatch[1]
-        const data = await cloudinarySearch(env, {
+        const data = await cachedSearch(env, `cache:cat:${cat}`, {
           expression: `asset_folder:portfolio/${cat}/*`,
           with_field: ['tags'],
           max_results: 500,
-        })
+        }, 300)
 
         const ensaiosMap = new Map()
         for (const r of data.resources || []) {
@@ -107,18 +107,18 @@ export default {
           if (ensaio && !ensaio.cover) ensaio.cover = r.public_id
         }
 
-        return json([...ensaiosMap.values()], cors)
+        return json([...ensaiosMap.values()], cors, 300) // Ensaios — cache 5 min
       }
 
       // GET /api/categories/:cat/:ensaio
       const photosMatch = path.match(/^\/api\/categories\/([^/]+)\/([^/]+)$/)
       if (photosMatch) {
         const [, cat, ensaio] = photosMatch
-        const data = await cloudinarySearch(env, {
+        const data = await cachedSearch(env, `cache:photos:${cat}:${ensaio}`, {
           expression: `asset_folder="portfolio/${cat}/${ensaio}" AND NOT tags:hidden`,
           with_field: ['tags', 'context'],
           max_results: 500,
-        })
+        }, 600)
 
         const photos = (data.resources || []).map(r => ({
           publicId: r.public_id,
@@ -126,14 +126,14 @@ export default {
           order: r.context?.custom?.order ?? 999,
         }))
 
-        return json(photos, cors)
+        return json(photos, cors, 600) // Photos — cache 10 min
       }
 
       // GET /api/movies
       if (path === '/api/movies') {
         const data = await env.MOVIES_KV.get('movies')
-        if (!data) return json([], cors)
-        return json(JSON.parse(data), cors)
+        if (!data) return json([], cors, 3600)
+        return json(JSON.parse(data), cors, 3600) // Movies — cache 1 hour
       }
 
       return new Response('Not found', { status: 404, headers: cors })
@@ -145,6 +145,22 @@ export default {
       })
     }
   }
+}
+
+async function cachedSearch(env, cacheKey, searchBody, ttlSeconds = 300) {
+  // Tenta KV primeiro
+  const cached = await env.MOVIES_KV.get(cacheKey)
+  if (cached) return JSON.parse(cached)
+
+  // Busca no Cloudinary
+  const data = await cloudinarySearch(env, searchBody)
+
+  // Salva no KV com TTL
+  await env.MOVIES_KV.put(cacheKey, JSON.stringify(data), {
+    expirationTtl: ttlSeconds
+  })
+
+  return data
 }
 
 async function cloudinarySearch(env, body) {
@@ -161,9 +177,13 @@ async function cloudinarySearch(env, body) {
   return res.json()
 }
 
-function json(data, cors) {
+function json(data, cors, ttl = 300) {
   return new Response(JSON.stringify(data), {
-    headers: { ...cors, 'Content-Type': 'application/json' }
+    headers: {
+      ...cors,
+      'Content-Type': 'application/json',
+      'Cache-Control': `public, max-age=${ttl}, stale-while-revalidate=60`,
+    }
   })
 }
 

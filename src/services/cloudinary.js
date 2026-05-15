@@ -5,7 +5,7 @@ const TRANSFORMS = {
   thumb:    'w_600,h_400,c_fill,q_auto,f_webp',
   grid:     'w_800,q_auto,f_webp',
   lightbox: 'w_1920,q_auto,f_webp',
-  hero:     'w_1920,q_auto:best,f_webp',
+  hero:     'w_1920,q_auto,f_webp',
   lqip:     'w_50,q_10,f_webp',
 }
 
