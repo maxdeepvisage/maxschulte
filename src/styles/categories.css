@@ -1,6 +1,6 @@
 .categories-page {
   min-height: 100vh;
-  padding: calc(var(--space-2xl) + 80px) var(--space-lg) var(--space-2xl);
+  padding: var(--page-padding-top) var(--space-lg) var(--space-2xl);
   max-width: 1400px;
   margin: 0 auto;
 }

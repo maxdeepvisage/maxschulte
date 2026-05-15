@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-lg);
+  padding: var(--page-padding-top) var(--space-lg) var(--space-lg);
 }
 
 .not-found__content {

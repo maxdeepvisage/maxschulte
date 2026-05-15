@@ -42,6 +42,10 @@
   --safe-left:   max(var(--space-sm), env(safe-area-inset-left));
   --safe-right:  max(var(--space-sm), env(safe-area-inset-right));
 
+  /* Navbar */
+  --navbar-height: 60px;
+  --page-padding-top: calc(var(--navbar-height) + var(--space-xl));
+
   /* Slideshow */
   --thumb-width:      80px;
   --line-base-height: 10px;
@@ -95,5 +99,13 @@
   :root {
     --font-size-3xl:  3rem;
     --font-size-hero: clamp(3rem, 6vw, 5rem);
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  :root {
+    --navbar-height: 56px;
+    --page-padding-top: calc(var(--navbar-height) + var(--space-lg));
   }
 }
