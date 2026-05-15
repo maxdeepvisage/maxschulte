@@ -1,8 +1,6 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
-
-    // CORS headers
     const cors = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
@@ -19,37 +17,64 @@ export default {
       // GET /api/categories
       if (path === '/api/categories') {
         const data = await cloudinaryGet(env, `folders/portfolio`)
-        return json(data.folders.map(f => ({
-          slug: f.name,
-          name: formatName(f.name),
-          path: f.path,
-        })), cors)
+        const categories = data.folders || []
+
+        const result = await Promise.all(categories.map(async f => {
+          // Busca recursos DIRETOS na pasta (não recursivo) usando o endpoint de assets por pasta
+          const resources = await cloudinaryGet(env,
+            `resources/image?prefix=portfolio/${f.name}/&type=upload&max_results=100`
+          )
+
+          const cover = (resources.resources || []).find(r => {
+            // Conta segmentos DEPOIS do prefix da categoria
+            const categoryPrefix = `portfolio/${f.name}/`
+            const afterPrefix = r.public_id.substring(categoryPrefix.length)
+            const parts = afterPrefix.split('/')
+            // xk29a8f.jpg → length 1 (cover direto)
+            // Bea/abc123.jpg → length 2 (dentro de ensaio)
+            return parts.length === 1
+          })
+
+          return {
+            slug: f.name,
+            name: formatName(f.name),
+            cover: cover ? cover.public_id : null,
+          }
+        }))
+
+        return json(result, cors)
       }
 
-      // GET /api/categories/:cat
+      // GET /api/categories/:cat — lista ensaios (subpastas)
       const ensaiosMatch = path.match(/^\/api\/categories\/([^/]+)$/)
       if (ensaiosMatch) {
         const cat = ensaiosMatch[1]
-        const data = await cloudinaryGet(env, `folders/portfolio/${cat}`)
-        const folders = data.folders || []
+
+        // Lista subpastas (ensaios)
+        const foldersData = await cloudinaryGet(env, `folders/portfolio/${cat}`)
+        const folders = foldersData.folders || []
 
         const ensaios = await Promise.all(folders.map(async f => {
           const resources = await cloudinaryGet(env,
             `resources/image?prefix=portfolio/${cat}/${f.name}/&type=upload&max_results=10&tags=true`
           )
-          const cover = resources.resources?.find(r => r.tags?.includes('cover'))
-            || resources.resources?.[0]
+          const photos = resources.resources || []
+
+          // Cover do ensaio = imagem com tag 'cover' ou primeira foto
+          const cover = photos.find(r => r.tags?.includes('cover')) || photos[0]
+
           return {
             slug: f.name,
             name: formatName(f.name),
-            thumb: cover ? cover.public_id : null,
+            cover: cover ? cover.public_id : null,
+            count: photos.length,
           }
         }))
 
         return json(ensaios, cors)
       }
 
-      // GET /api/categories/:cat/:ensaio
+      // GET /api/categories/:cat/:ensaio — lista fotos
       const photosMatch = path.match(/^\/api\/categories\/([^/]+)\/([^/]+)$/)
       if (photosMatch) {
         const [, cat, ensaio] = photosMatch
@@ -63,6 +88,7 @@ export default {
             tags: r.tags || [],
             order: r.context?.custom?.order || 999,
           }))
+          .sort((a, b) => a.order - b.order)
 
         return json(photos, cors)
       }
