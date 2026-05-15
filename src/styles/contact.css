@@ -16,11 +16,6 @@
   margin-bottom: var(--space-lg);
 }
 
-.contact-hero {
-  margin-bottom: var(--space-2xl);
-  padding-bottom: var(--space-2xl);
-}
-
 .contact-title {
   font-family: var(--font-display);
   font-size: clamp(3rem, 8vw, 7rem);
