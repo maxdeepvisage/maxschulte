@@ -8,6 +8,7 @@
 @import './galeria.css';
 @import './movies.css';
 @import './categories.css';
+@import './404.css';
 
 body {
   background-color: var(--color-bg);

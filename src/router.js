@@ -62,7 +62,19 @@ async function navigate(pathname) {
   const matched = matchRoute(pathname)
 
   if (!matched) {
-    app.innerHTML = '<div style="padding:4rem;text-align:center;font-family:monospace">404 — page not found</div>'
+    app.innerHTML = `
+      <div class="not-found">
+        <div class="not-found__content">
+          <p class="not-found__code">404</p>
+          <h1 class="not-found__title">Page Not Found</h1>
+          <p class="not-found__desc">The page you're looking for doesn't exist or has been moved.</p>
+          <button class="not-found__btn" id="notFoundBack">← Back to Home</button>
+        </div>
+      </div>
+    `
+    requestAnimationFrame(() => {
+      document.querySelector('#notFoundBack')?.addEventListener('click', () => push('/'))
+    })
     return
   }
 

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "QvcAmuvCjPQ",
+    "title": "Ireland's Hidden Climbing Country",
+    "description": "West Donegal has more climbable rock within an hour's drive than the rest of Ireland put together — and most people have no idea. The first time you go, you'll be scared. That's just part of it. But once you're up there and you realize it's not what you imagined, something shifts.",
+    "year": "2024",
+    "orientation": "horizontal"
+  },
+  {
+    "id": "5oTL29f1lus",
+    "title": "World Art Dubai",
+    "description": "Thiago Moreira and Marcell Khiesz showed at World Art Dubai — one of the region's largest international art fairs. Two artists, two distinct approaches, one shared stage.",
+    "year": "2023",
+    "location": "Dubai",
+    "orientation": "horizontal"
+  },
+  {
+    "id": "OJp4xXIpdMs",
+    "title": "Carrousel du Louvre",
+    "description": "Thiago Moreira's piece Unlock was exhibited at the Carrousel du Louvre — a space that sits beneath one of the most visited museums in the world. The work went from Dublin to Paris.",
+    "year": "2022",
+    "location": "Paris",
+    "orientation": "horizontal"
+  },
+  {
+    "id": "Fh5FaKhsrCw",
+    "title": "Walking the Talk for Dementia",
+    "description": "Four days walking. Two days in conversation. For the people who were there — some living with dementia, some caring for them, some working in the field — it added up to something none of them fully expected. Labels disappeared within the first few days. What was left were just people, getting to know each other on a trail, talking honestly in a way that's harder to do in a conference room.",
+    "year": "2024",
+    "orientation": "horizontal"
+  },
+  {
+    "id": "Sl3eNcXxips",
+    "title": "Black Cat Cosmetics — Electric Ink",
+    "description": "Every tattoo starts before the needle touches skin, and it doesn't end when the session does. Electric Ink built the Black Cat Cosmetics line around that idea — a full process, from prep to healing, designed by tattoo artists for tattoo artists.",
+    "year": "2024",
+    "orientation": "horizontal"
+  },
+  {
+    "id": "Q3uBGqnUt2g",
+    "title": "Leo & Camila — Dublin",
+    "description": "Two Brazilians crossed an ocean and found each other in Dublin — which is either fate or a very good algorithm, depending on who you ask. Married online, just like they met. A small ceremony, a big yes, and a baby on the way.",
+    "year": "2024",
+    "location": "Dublin",
+    "orientation": "horizontal"
+  }
+]
