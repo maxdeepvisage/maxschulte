@@ -1,93 +1,55 @@
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dxwnh6a6r'
-
-function cloudinaryUrl(publicId, transform) {
-  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${transform}/${publicId}`
-}
-
 const PHOTO_ID = 'ganga-5_iw4fis'
+
+const STEPS = [
+  {
+    eyebrow: 'About',
+    title: 'I tell stories\nthrough light.',
+    body: 'Placeholder — Max Schulte is a photographer and filmmaker based in Dublin. His work spans documentary, portrait, fashion, and corporate photography — always rooted in the real.',
+    align: 'left',
+  },
+  {
+    eyebrow: 'Approach',
+    title: 'Every frame\nis a decision.',
+    body: 'Placeholder — The best images come from trust. From slowing down. From being present in the room rather than hiding behind the camera. That\'s the only way to capture something real.',
+    align: 'right',
+  },
+  {
+    eyebrow: 'Work',
+    title: 'From Dublin\nto everywhere.',
+    body: 'Placeholder — Portraits, documentaries, brand campaigns, events, weddings, and film. Available for projects across Ireland and internationally.',
+    align: 'left',
+  },
+  {
+    eyebrow: 'Let\'s work together',
+    title: 'Have a project\nin mind?',
+    body: 'Placeholder — Every project starts with a conversation. Reach out and let\'s make something worth keeping.',
+    align: 'center',
+    cta: true,
+  },
+]
 
 export async function renderAbout(params = {}) {
   const html = `
     <div class="about-page">
 
-      <!-- Section 1 — Wide, intro -->
-      <section class="about-section about-section--1">
-        <div class="about-img-wrap">
-          <div class="about-img" id="aboutImg1"
-               style="background-image: url(${cloudinaryUrl(PHOTO_ID, 'w_1920,q_auto,f_webp')})">
-          </div>
-          <div class="about-img-overlay"></div>
+      <div class="about-sticky">
+        <div class="about-photo" id="aboutPhoto"
+             style="background-image: url(https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1920,q_auto,f_webp/${PHOTO_ID})">
         </div>
-        <div class="about-text about-text--intro">
-          <p class="about-label">About</p>
-          <h1 class="about-title">I tell stories<br>through light.</h1>
-          <p class="about-body">
-            Placeholder — Max Schulte is a photographer and filmmaker
-            based in Dublin. His work spans documentary, portrait, fashion,
-            and corporate photography — always rooted in the real.
-          </p>
-        </div>
-      </section>
+        <div class="about-overlay" id="aboutOverlay"></div>
 
-      <!-- Section 2 — Closer, philosophy -->
-      <section class="about-section about-section--2">
-        <div class="about-img-wrap">
-          <div class="about-img" id="aboutImg2"
-               style="background-image: url(${cloudinaryUrl(PHOTO_ID, 'w_1920,q_auto,f_webp,z_1.3')})">
+        ${STEPS.map((step, i) => `
+          <div class="about-step ${i === 0 ? 'active' : ''} about-step--${step.align}" data-step="${i}">
+            <p class="about-eyebrow">${step.eyebrow}</p>
+            <h2 class="about-heading">${step.title.replace('\n', '<br>')}</h2>
+            <p class="about-body">${step.body}</p>
+            ${step.cta ? `<a class="about-cta" data-link="/contact">Get in touch ↗</a>` : ''}
           </div>
-          <div class="about-img-overlay"></div>
-        </div>
-        <div class="about-text about-text--right">
-          <p class="about-eyebrow">Approach</p>
-          <h2 class="about-heading">Every frame<br>is a decision.</h2>
-          <p class="about-body">
-            Placeholder — The best images come from trust.
-            From slowing down. From being present in the room
-            rather than hiding behind the camera.
-            That's the only way to capture something real.
-          </p>
-        </div>
-      </section>
+        `).join('')}
+      </div>
 
-      <!-- Section 3 — Even closer, work -->
-      <section class="about-section about-section--3">
-        <div class="about-img-wrap">
-          <div class="about-img" id="aboutImg3"
-               style="background-image: url(${cloudinaryUrl(PHOTO_ID, 'w_1920,q_auto,f_webp,z_1.7')})">
-          </div>
-          <div class="about-img-overlay"></div>
-        </div>
-        <div class="about-text about-text--left">
-          <p class="about-eyebrow">Work</p>
-          <h2 class="about-heading">From Dublin<br>to everywhere.</h2>
-          <p class="about-body">
-            Placeholder — Portraits, documentaries, brand campaigns,
-            events, weddings, and film. Available for projects
-            across Ireland and internationally.
-          </p>
-        </div>
-      </section>
-
-      <!-- Section 4 — Close, CTA -->
-      <section class="about-section about-section--4">
-        <div class="about-img-wrap">
-          <div class="about-img" id="aboutImg4"
-               style="background-image: url(${cloudinaryUrl(PHOTO_ID, 'w_1920,q_auto,f_webp,z_2.2')})">
-          </div>
-          <div class="about-img-overlay about-img-overlay--dark"></div>
-        </div>
-        <div class="about-text about-text--center">
-          <p class="about-eyebrow">Let's work together</p>
-          <h2 class="about-heading">Have a project<br>in mind?</h2>
-          <p class="about-body">
-            Placeholder — Every project starts with a conversation.
-            Reach out and let's make something worth keeping.
-          </p>
-          <a href="/contact" class="about-cta" data-link="/contact">
-            Get in touch ↗
-          </a>
-        </div>
-      </section>
+      <div class="about-scroll-track" id="aboutTrack"></div>
 
     </div>
   `
@@ -97,37 +59,42 @@ export async function renderAbout(params = {}) {
 }
 
 function initAbout() {
-  const sections = document.querySelectorAll('.about-section')
-  if (!sections.length) return
+  const photo   = document.getElementById('aboutPhoto')
+  const overlay = document.getElementById('aboutOverlay')
+  const page    = document.querySelector('.about-page')
+  const steps   = document.querySelectorAll('.about-step')
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view')
-      }
-    })
-  }, { threshold: 0.15 })
+  if (!photo || !page) return
 
-  sections.forEach(s => observer.observe(s))
+  const TOTAL_STEPS = STEPS.length
 
-  // Parallax suave no scroll
-  const onScroll = () => {
-    const scrollY = window.scrollY
+  function onScroll() {
+    const rect     = page.getBoundingClientRect()
+    const pageTop  = window.scrollY + rect.top
+    const scrolled = window.scrollY - pageTop
+    const vh       = window.innerHeight
+    const progress = Math.max(0, scrolled / vh)
+    const stepIndex = Math.min(Math.floor(progress), TOTAL_STEPS - 1)
 
-    sections.forEach((section, i) => {
-      const img = section.querySelector('.about-img')
-      if (!img) return
-      const rect = section.getBoundingClientRect()
-      const center = rect.top + rect.height / 2 - window.innerHeight / 2
-      const parallax = center * 0.08
-      img.style.transform = `scale(${1 + i * 0.08}) translateY(${parallax}px)`
+    // Zoom — de 1 a 1.6
+    const zoom = 1 + Math.min(progress / TOTAL_STEPS, 1) * 0.6
+    photo.style.transform = `scale(${zoom})`
+
+    // Overlay
+    const darkness = Math.min(0.2 + (progress / TOTAL_STEPS) * 0.4, 0.65)
+    overlay.style.background = `rgba(0,0,0,${darkness})`
+
+    // Steps
+    steps.forEach((s, i) => {
+      const isActive = i === stepIndex
+      s.classList.toggle('active', isActive)
     })
   }
 
   window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
 
   window.__pageCleanup = () => {
     window.removeEventListener('scroll', onScroll)
-    observer.disconnect()
   }
 }
