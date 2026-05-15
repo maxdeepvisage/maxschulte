@@ -6,6 +6,7 @@
 @import './animations.css';
 @import './navbar.css';
 @import './footer.css';
+@import './hero.css';
 
 body {
   background-color: var(--color-bg);
