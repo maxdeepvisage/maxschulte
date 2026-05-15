@@ -51,7 +51,6 @@ function matchRoute(pathname) {
 const app = document.getElementById('app')
 
 async function navigate(pathname) {
-  // Cleanup página anterior
   if (window.__pageCleanup) {
     window.__pageCleanup()
     window.__pageCleanup = null
@@ -75,36 +74,97 @@ async function navigate(pathname) {
     requestAnimationFrame(() => {
       document.querySelector('#notFoundBack')?.addEventListener('click', () => push('/'))
     })
+    setMeta({
+      title: '404 — Max Schulte',
+      description: 'Page not found.',
+    })
     return
   }
 
-  // Fade out
-  app.style.transition = 'opacity 0.18s ease'
+  const duration = window.matchMedia('(max-width: 767px)').matches ? 100 : 180
+  app.style.transition = `opacity ${duration}ms ease`
   app.style.opacity = '0'
-
-  await new Promise(r => setTimeout(r, 180))
+  await new Promise(r => setTimeout(r, duration))
 
   app.innerHTML = await matched.render(matched.params)
 
-  // Título dinâmico
-  const titles = {
-    '/':        'Max Schulte — Photography & Film',
-    '/work':    'Work — Max Schulte',
-    '/movies':  'Movies — Max Schulte',
-    '/about':   'About — Max Schulte',
-    '/contact': 'Contact — Max Schulte',
-    '/privacy': 'Privacy — Max Schulte',
-    '/terms':   'Terms — Max Schulte',
-    '/admin':   'Admin — Max Schulte',
-  }
-  const base = pathname.split('/').slice(0, 2).join('/') || '/'
-  document.title = titles[base] || 'Max Schulte — Photography & Film'
-
-  // Fade in
   app.style.opacity = '0'
-  requestAnimationFrame(() => {
-    app.style.opacity = '1'
-  })
+  requestAnimationFrame(() => { app.style.opacity = '1' })
+
+  updateMeta(pathname, matched.params)
+}
+
+function updateMeta(pathname, params = {}) {
+  const base = pathname.split('/').slice(0, 2).join('/') || '/'
+
+  const metas = {
+    '/': {
+      title: 'Max Schulte — Photography & Film',
+      description: 'Portfolio of Max Schulte — documentary, portrait, fashion and event photography based in Dublin, available worldwide.',
+    },
+    '/work': {
+      title: 'Work — Max Schulte',
+      description: 'Photography portfolio — documentaries, portraits, fashion, events and more.',
+    },
+    '/movies': {
+      title: 'Movies — Max Schulte',
+      description: 'Film and documentary work by Max Schulte.',
+    },
+    '/about': {
+      title: 'About — Max Schulte',
+      description: 'Max Schulte is a photographer and filmmaker based in Dublin, available worldwide.',
+    },
+    '/contact': {
+      title: 'Contact — Max Schulte',
+      description: 'Get in touch to discuss your project.',
+    },
+    '/privacy': {
+      title: 'Privacy Policy — Max Schulte',
+      description: 'Privacy policy for maxschulte.com',
+    },
+    '/terms': {
+      title: 'Terms of Use — Max Schulte',
+      description: 'Terms of use for maxschulte.com',
+    },
+  }
+
+  const meta = metas[base] || metas['/']
+
+  if (params.ensaio) {
+    meta.title = `${params.ensaio} — Max Schulte`
+  } else if (params.cat && !params.ensaio) {
+    meta.title = `${params.cat.charAt(0).toUpperCase() + params.cat.slice(1)} — Max Schulte`
+  }
+
+  setMeta(meta)
+}
+
+function setMeta({ title, description }) {
+  document.title = title
+
+  let desc = document.querySelector('meta[name="description"]')
+  if (!desc) {
+    desc = document.createElement('meta')
+    desc.name = 'description'
+    document.head.appendChild(desc)
+  }
+  desc.content = description
+
+  // Open Graph
+  setOG('og:title', title)
+  setOG('og:description', description)
+  setOG('og:type', 'website')
+  setOG('og:url', window.location.href)
+}
+
+function setOG(property, content) {
+  let el = document.querySelector(`meta[property="${property}"]`)
+  if (!el) {
+    el = document.createElement('meta')
+    el.setAttribute('property', property)
+    document.head.appendChild(el)
+  }
+  el.setAttribute('content', content)
 }
 
 export function push(path) {
