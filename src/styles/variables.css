@@ -44,7 +44,7 @@
 
   /* Navbar */
   --navbar-height: 60px;
-  --page-padding-top: calc(var(--navbar-height) + var(--space-2xl));
+  --page-padding-top: calc(var(--navbar-height) + var(--space-xl));
 
   /* Slideshow */
   --thumb-width:      80px;
@@ -106,6 +106,6 @@
 @media (max-width: 767px) {
   :root {
     --navbar-height: 56px;
-    --page-padding-top: calc(var(--navbar-height) + var(--space-2xl));
+    --page-padding-top: calc(var(--navbar-height) + var(--space-lg));
   }
 }
