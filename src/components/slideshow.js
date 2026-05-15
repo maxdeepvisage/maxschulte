@@ -1,5 +1,6 @@
 import gsap from 'gsap'
 import { push } from '../router.js'
+import { imageUrl } from '../services/cloudinary.js'
 
 const NEXT = 1
 const PREV = -1
@@ -166,8 +167,7 @@ export function initSlideshow(categories) {
     categories.forEach((cat, i) => {
       const thumb = document.createElement('div')
       thumb.className = 'slide-thumb' + (i === 0 ? ' active' : '')
-      // usa a primeira imagem do ensaio como thumb — por ora placeholder
-      thumb.style.backgroundImage = `url(https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/w_200,h_100,c_fill,q_auto,f_webp/portfolio/${cat.slug}/cover)`
+      thumb.style.backgroundImage = `url(${imageUrl(cat.cover, 'thumb')})`
 
       thumb.addEventListener('click', () => { lastHoveredThumbIndex = i; slideshow.goTo(i) })
       thumb.addEventListener('mouseenter', () => {

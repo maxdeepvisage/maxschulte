@@ -10,6 +10,7 @@ const TRANSFORMS = {
 }
 
 export function imageUrl(publicId, transform = 'grid') {
+  if (!publicId) return ''
   const t = TRANSFORMS[transform] || transform
   return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${t}/${publicId}`
 }
