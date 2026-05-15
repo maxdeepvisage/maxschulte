@@ -20,20 +20,13 @@ export default {
         const categories = data.folders || []
 
         const result = await Promise.all(categories.map(async f => {
-          // Busca recursos DIRETOS na pasta (não recursivo) usando o endpoint de assets por pasta
           const resources = await cloudinaryGet(env,
-            `resources/image?prefix=portfolio/${f.name}/&type=upload&max_results=100`
+            `resources/image?prefix=portfolio/${f.name}/&type=upload&max_results=50&tags=true`
           )
 
-          const cover = (resources.resources || []).find(r => {
-            // Conta segmentos DEPOIS do prefix da categoria
-            const categoryPrefix = `portfolio/${f.name}/`
-            const afterPrefix = r.public_id.substring(categoryPrefix.length)
-            const parts = afterPrefix.split('/')
-            // xk29a8f.jpg → length 1 (cover direto)
-            // Bea/abc123.jpg → length 2 (dentro de ensaio)
-            return parts.length === 1
-          })
+          const cover = (resources.resources || []).find(r =>
+            r.tags?.includes('cover')
+          ) || (resources.resources || [])[0]
 
           return {
             slug: f.name,
