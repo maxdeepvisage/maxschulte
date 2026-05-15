@@ -45,11 +45,7 @@ export async function renderHome(params = {}) {
     </div>
   `
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      initSlideshow(categories)
-    })
-  })
+  requestAnimationFrame(() => initSlideshow(categories))
 
   return html
 }

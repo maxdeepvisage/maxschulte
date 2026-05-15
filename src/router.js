@@ -14,7 +14,7 @@ const routes = [
   { path: '/work',                    render: renderCategories },
   { path: '/work/:cat',               render: renderEnsaios },
   { path: '/work/:cat/:ensaio',       render: renderGaleria },
-  { path: '/videos',                  render: renderVideos },
+  { path: '/movies',                   render: renderVideos },
   { path: '/about',                   render: renderAbout },
   { path: '/contact',                 render: renderContact },
   { path: '/admin',                   render: renderAdminLogin },

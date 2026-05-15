@@ -58,11 +58,7 @@ export async function renderEnsaios(params = {}) {
     </div>
   `
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      initEnsaios(ensaios, cat)
-    })
-  })
+  requestAnimationFrame(() => initEnsaios(ensaios, cat))
 
   return html
 }

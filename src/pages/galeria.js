@@ -85,7 +85,7 @@ export async function renderGaleria(params = {}) {
     </div>
   `
 
-  requestAnimationFrame(() => requestAnimationFrame(() => initGaleria(photos, ensaios, ensaio, cat, ensaioName)))
+  requestAnimationFrame(() => initGaleria(photos, ensaios, ensaio, cat, ensaioName))
 
   return html
 }

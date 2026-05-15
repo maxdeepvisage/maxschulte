@@ -8,11 +8,11 @@ export function renderNavbar() {
     <a class="navbar__logo" data-link="/">MS</a>
     <ul class="navbar__links">
       <li><a data-link="/work">Work</a></li>
-      <li><a data-link="/videos">Film</a></li>
+      <li><a data-link="/movies">Film</a></li>
       <li><a data-link="/about">About</a></li>
       <li><a data-link="/contact">Contact</a></li>
     </ul>
-    <button class="navbar__burger" aria-label="Menu">
+    <button class="navbar__burger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span>
     </button>
   `
@@ -21,8 +21,9 @@ export function renderNavbar() {
   const burger = nav.querySelector('.navbar__burger')
   const links  = nav.querySelector('.navbar__links')
   burger.addEventListener('click', () => {
-    links.classList.toggle('open')
+    const isOpen = links.classList.toggle('open')
     burger.classList.toggle('open')
+    burger.setAttribute('aria-expanded', isOpen)
   })
 
   // Fecha menu ao clicar em link

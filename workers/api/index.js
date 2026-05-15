@@ -2,8 +2,15 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url)
 
+    const allowedOrigins = [
+      'https://maxschulte.pages.dev',
+      'http://localhost:5173',
+      'http://localhost:4173',
+    ]
+
+    const origin = request.headers.get('Origin') || ''
     const cors = {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     }
