@@ -111,7 +111,7 @@
 
 /* ===== SECTION ===== */
 .movies-section {
-  padding: var(--page-padding-top) var(--space-2xl) var(--space-2xl);
+  padding: var(--space-xl) var(--space-2xl) var(--space-2xl);
 }
 
 .movies-section__title {
