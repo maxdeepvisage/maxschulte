@@ -2,5 +2,9 @@ name = "maxschulte-api"
 main = "workers/api/index.js"
 compatibility_date = "2024-01-01"
 
+[[kv_namespaces]]
+binding = "MOVIES_KV"
+id = "14a4d5b30b844f0e98777ad2bb15d3f3"
+
 [vars]
 CLOUDINARY_CLOUD_NAME = "dxwnh6a6r"

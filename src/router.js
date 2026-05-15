@@ -51,6 +51,12 @@ function matchRoute(pathname) {
 const app = document.getElementById('app')
 
 async function navigate(pathname) {
+  // Cleanup página anterior
+  if (window.__pageCleanup) {
+    window.__pageCleanup()
+    window.__pageCleanup = null
+  }
+  document.body.style.overflow = ''
   window.scrollTo(0, 0)
 
   const matched = matchRoute(pathname)

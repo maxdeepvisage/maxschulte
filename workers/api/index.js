@@ -129,6 +129,13 @@ export default {
         return json(photos, cors)
       }
 
+      // GET /api/movies
+      if (path === '/api/movies') {
+        const data = await env.MOVIES_KV.get('movies')
+        if (!data) return json([], cors)
+        return json(JSON.parse(data), cors)
+      }
+
       return new Response('Not found', { status: 404, headers: cors })
 
     } catch (err) {

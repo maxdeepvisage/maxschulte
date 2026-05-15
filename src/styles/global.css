@@ -9,6 +9,7 @@
 @import './hero.css';
 @import './ensaios.css';
 @import './galeria.css';
+@import './movies.css';
 
 body {
   background-color: var(--color-bg);

@@ -8,7 +8,7 @@ export function renderNavbar() {
     <a class="navbar__logo" data-link="/">MS</a>
     <ul class="navbar__links">
       <li><a data-link="/work">Work</a></li>
-      <li><a data-link="/movies">Film</a></li>
+      <li><a data-link="/movies">Movies</a></li>
       <li><a data-link="/about">About</a></li>
       <li><a data-link="/contact">Contact</a></li>
     </ul>
