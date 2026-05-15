@@ -27,12 +27,17 @@ export async function renderEnsaios(params = {}) {
           `).join('')}
         </div>
 
+        <div class="ensaios-dots">
+          ${ensaios.map((_, i) => `
+            <span class="ensaios-dot ${i === 0 ? 'active' : ''}"></span>
+          `).join('')}
+        </div>
+
         <!-- Direita: conteúdo -->
         <div class="ensaios-content">
 
           <div class="ensaios-info">
             <p class="ensaios-info__cat">← <span data-link="/work">${catName}</span></p>
-            <p class="ensaios-info__sub"><span class="ensaios-info__album">${first.name}</span></p>
             <h1 class="ensaios-info__title">${first.name}</h1>
             <button class="ensaios-info__cta" data-slug="${first.slug}">View Series ↗</button>
           </div>
@@ -41,9 +46,9 @@ export async function renderEnsaios(params = {}) {
             ${ensaios.map((e, i) => `
               <button class="ensaios-tab ${i === 0 ? 'active' : ''}"
                       data-index="${i}"
-                      data-slug="${e.slug}">
+                      data-slug="${e.slug}"
+                      style="--bg-image: url(${imageUrl(e.cover, 'thumb')})">
                 <span class="ensaios-tab__name">${e.name}</span>
-                <span class="ensaios-tab__line"></span>
               </button>
             `).join('')}
           </div>
@@ -101,11 +106,19 @@ function initEnsaios(ensaios, cat) {
     // Tabs
     tabs[current].classList.remove('active')
     tabs[index].classList.add('active')
+
+    // Atualiza dots
+    document.querySelectorAll('.ensaios-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === index)
+    })
+
     current = index
   }
 
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => goTo(Number(tab.dataset.index)))
+    tab.addEventListener('click', () => {
+      goTo(Number(tab.dataset.index))
+    })
   })
 
   cta.addEventListener('click', () => {
@@ -113,4 +126,25 @@ function initEnsaios(ensaios, cat) {
   })
 
   catLink?.addEventListener('click', () => push('/work'))
+
+  // Swipe na imagem mobile
+  const imageEl = document.querySelector('.ensaios-image')
+  if (imageEl) {
+    let startX = 0
+    imageEl.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX
+    }, { passive: true })
+
+    imageEl.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - startX
+      if (Math.abs(dx) < 50) return
+      if (dx < 0) {
+        const next = (current + 1) % ensaios.length
+        goTo(next)
+      } else {
+        const prev = (current - 1 + ensaios.length) % ensaios.length
+        goTo(prev)
+      }
+    }, { passive: true })
+  }
 }

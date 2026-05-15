@@ -41,3 +41,27 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
+
+@media (max-width: 767px) {
+  .footer {
+    padding: var(--space-lg);
+    padding-bottom: var(--safe-bottom);
+  }
+
+  .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .footer__links {
+    gap: var(--space-lg);
+  }
+
+  .footer__name,
+  .footer__copy,
+  .footer__links a {
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--ls-wide);
+  }
+}

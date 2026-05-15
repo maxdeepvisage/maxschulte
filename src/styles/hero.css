@@ -196,13 +196,48 @@
   border-color: rgba(255,255,255,0.2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .hero__ui {
     width: 100%;
-    padding: 0 var(--space-sm) var(--space-sm);
+    padding: 0 var(--space-lg) var(--safe-bottom);
+  }
+
+  .hero__category-label {
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--ls-wide);
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero__count {
+    font-size: var(--font-size-xs);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-xl);
+    letter-spacing: var(--ls-wide);
+  }
+
+  .hero__title-container {
+    height: 30px;
+    margin-bottom: var(--space-xs);
+  }
+
+  .drag-indicator {
+    height: 30px;
+    margin-bottom: 0;
   }
 
   .slide-thumb {
-    height: 50px;
+    height: 40px;
+  }
+
+  .hero__scroll-hint {
+    display: none;
+  }
+
+  .hero__enter-btn {
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--ls-wide);
+    padding: var(--space-sm) var(--space-lg);
   }
 }

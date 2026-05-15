@@ -44,3 +44,27 @@ h1, h2, h3, h4 {
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
 }
+
+/* Disable hover on touch devices */
+@media (hover: none) {
+  .masonry-item:hover img {
+    transform: none;
+    filter: brightness(0.95);
+  }
+
+  .category-card:hover .category-card__img {
+    transform: none;
+  }
+
+  .navbar__links a:hover {
+    color: var(--color-text-muted);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

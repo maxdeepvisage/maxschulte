@@ -1,3 +1,4 @@
+/* ===== ENSAIOS — DESKTOP FIRST ===== */
 .ensaios-page {
   width: 100%;
   height: 100vh;
@@ -10,7 +11,6 @@
   height: 100%;
 }
 
-/* Esquerda — imagem */
 .ensaios-image {
   position: relative;
   overflow: hidden;
@@ -28,21 +28,21 @@
   opacity: 1;
 }
 
-/* Direita — conteúdo */
 .ensaios-content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: calc(var(--space-2xl) + 60px) var(--space-2xl) var(--space-xl);
   background: var(--color-bg);
+  overflow-y: auto;
 }
 
 .ensaios-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: var(--space-md);
+  justify-content: flex-start;
+  gap: var(--space-lg);
 }
 
 .ensaios-info__cat {
@@ -55,9 +55,7 @@
   transition: color var(--transition-fast);
 }
 
-.ensaios-info__cat:hover {
-  color: var(--color-text);
-}
+.ensaios-info__cat:hover { color: var(--color-text); }
 
 .ensaios-info__sub {
   font-family: var(--font-display);
@@ -73,8 +71,9 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text);
-  line-height: 1;
+  line-height: 1.1;
   margin: 0;
+  font-weight: 400;
 }
 
 .ensaios-info__cta {
@@ -89,6 +88,7 @@
   background: transparent;
   transition: all var(--transition-base);
   cursor: pointer;
+  min-height: 44px;
 }
 
 .ensaios-info__cta:hover {
@@ -96,14 +96,16 @@
   color: var(--color-accent);
 }
 
-/* Tabs */
 .ensaios-tabs {
   display: flex;
   gap: var(--space-lg);
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-md);
   overflow-x: auto;
+  scrollbar-width: none;
 }
+
+.ensaios-tabs::-webkit-scrollbar { display: none; }
 
 .ensaios-tab {
   display: flex;
@@ -114,6 +116,8 @@
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
+  min-height: 44px;
+  justify-content: flex-end;
 }
 
 .ensaios-tab__name {
@@ -123,6 +127,7 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
   transition: color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .ensaios-tab__line {
@@ -134,73 +139,159 @@
 }
 
 .ensaios-tab.active .ensaios-tab__name,
-.ensaios-tab:hover .ensaios-tab__name {
-  color: var(--color-text);
+.ensaios-tab:hover .ensaios-tab__name { color: var(--color-text); }
+
+.ensaios-tab.active .ensaios-tab__line { background: var(--color-accent); }
+.ensaios-tab:hover .ensaios-tab__line { background: var(--color-text-muted); }
+
+/* ===== DOTS INDICATOR ===== */
+.ensaios-dots {
+  display: none;
 }
 
-.ensaios-tab.active .ensaios-tab__line {
-  background: var(--color-accent);
-}
-
-.ensaios-tab:hover .ensaios-tab__line {
-  background: var(--color-text-muted);
-}
-
-/* Mobile */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .ensaios-page {
-    height: auto;
-    min-height: 100vh;
-    overflow: auto;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   .ensaios-split {
-    grid-template-columns: 1fr;
-    grid-template-rows: 55vh auto;
-    height: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
+  /* Imagem ocupa 60% da tela */
   .ensaios-image {
-    height: 55vh;
+    width: 100%;
+    flex: 1;
     position: relative;
+    overflow: hidden;
+    touch-action: pan-y;
   }
 
+  .ensaios-image__slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .ensaios-image__slide.active {
+    opacity: 1;
+  }
+
+  /* Conteúdo embaixo — compacto */
   .ensaios-content {
-    padding: var(--space-xl) var(--space-lg) var(--space-lg);
-    gap: var(--space-xl);
+    flex-shrink: 0;
     height: auto;
+    padding: var(--space-md) var(--space-lg) var(--safe-bottom);
+    gap: var(--space-sm);
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
   }
 
   .ensaios-info {
-    gap: var(--space-sm);
+    gap: var(--space-xs);
+    flex: none;
+    justify-content: flex-start;
   }
 
   .ensaios-info__cat {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--ls-wide);
   }
 
-  .ensaios-info__title {
-    font-size: var(--font-size-2xl);
-  }
-
-  .ensaios-tabs {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: var(--space-sm);
-    gap: var(--space-md);
-  }
-
-  .ensaios-tabs::-webkit-scrollbar {
+  .ensaios-info__sub {
     display: none;
   }
 
-  .ensaios-tab {
+  .ensaios-info__title {
+    font-size: var(--font-size-xl);
+    letter-spacing: var(--ls-wide);
+  }
+
+  .ensaios-info__cta {
+    width: 100%;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--ls-wide);
+    padding: var(--space-sm);
+    min-height: 44px;
+    align-self: stretch;
+  }
+
+  /* Dots indicator */
+  .ensaios-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: var(--space-sm) 0;
     flex-shrink: 0;
   }
 
+  .ensaios-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .ensaios-dot.active {
+    width: 16px;
+    border-radius: 2px;
+    background: var(--color-text);
+    opacity: 1;
+  }
+
+  /* Tabs — só nomes em blocos horizontais */
+  .ensaios-tabs {
+    display: flex !important;
+    gap: var(--space-xs);
+    padding: var(--space-xs) 0 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-top: 1px solid var(--color-border);
+    flex-wrap: nowrap;
+  }
+
+  .ensaios-tabs::-webkit-scrollbar { display: none; }
+
+  .ensaios-tab {
+    flex-shrink: 0;
+    height: 32px;
+    padding: 0 var(--space-sm);
+    border: 1px solid var(--color-border);
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .ensaios-tab.active {
+    border-color: var(--color-accent);
+  }
+
   .ensaios-tab__name {
-    font-size: var(--font-size-sm);
+    font-size: 10px;
+    letter-spacing: var(--ls-wide);
     white-space: nowrap;
+    color: var(--color-text-muted);
+  }
+
+  .ensaios-tab.active .ensaios-tab__name {
+    color: var(--color-text);
+  }
+
+  .ensaios-tab__line {
+    display: none;
   }
 }
