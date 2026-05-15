@@ -3,6 +3,32 @@ import { push } from '../router.js'
 
 export async function renderGaleria(params = {}) {
   const { cat, ensaio } = params
+  const app = document.getElementById('app')
+
+  if (app) {
+    app.innerHTML = `
+      <div class="galeria-wrap">
+        <aside class="galeria-sidebar">
+          <div class="skeleton-line" style="width:80px;margin-bottom:24px"></div>
+          ${[1,2,3].map(() => `
+            <div class="skeleton-line" style="width:100%;margin-bottom:12px"></div>
+          `).join('')}
+        </aside>
+        <div class="galeria-page">
+          <header class="galeria-header">
+            <div class="skeleton-line" style="width:200px;height:32px"></div>
+          </header>
+          <main class="galeria-main">
+            <div class="masonry">
+              ${[1,2,3,4,5,6,7,8].map(() => `
+                <div class="skeleton-block" style="margin-bottom:8px;aspect-ratio:${Math.random() > 0.5 ? '3/4' : '3/2'}"></div>
+              `).join('')}
+            </div>
+          </main>
+        </div>
+      </div>
+    `
+  }
 
   let photos, ensaios
   try {

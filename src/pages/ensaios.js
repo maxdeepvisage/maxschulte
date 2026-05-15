@@ -4,7 +4,33 @@ import gsap from 'gsap'
 
 export async function renderEnsaios(params = {}) {
   const { cat } = params
-  const ensaios = await getEnsaios(cat)
+  const app = document.getElementById('app')
+
+  if (app) {
+    app.innerHTML = `
+      <div class="ensaios-page">
+        <div class="ensaios-split">
+          <div class="ensaios-image">
+            <div class="skeleton-block" style="width:100%;height:100%"></div>
+          </div>
+          <div class="ensaios-content">
+            <div class="ensaios-info">
+              <div class="skeleton-line" style="width:80px"></div>
+              <div class="skeleton-line" style="width:200px;height:36px;margin-top:8px"></div>
+              <div class="skeleton-line" style="width:120px;height:44px;margin-top:16px"></div>
+            </div>
+            <div class="ensaios-tabs">
+              ${[1,2,3,4].map(() => `
+                <div class="skeleton-block" style="width:80px;height:32px"></div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  const ensaios = await getEnsaios(cat).catch(() => [])
 
   if (!ensaios.length) {
     return `<div class="empty-page" style="padding:4rem;text-align:center">No albums found.</div>`

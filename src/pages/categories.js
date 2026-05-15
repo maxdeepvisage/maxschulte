@@ -2,6 +2,23 @@ import { getCategories, imageUrl } from '../services/cloudinary.js'
 import { push } from '../router.js'
 
 export async function renderCategories(params = {}) {
+  const app = document.getElementById('app')
+
+  if (app) {
+    app.innerHTML = `
+      <div class="categories-page">
+        <header class="page-header">
+          <div class="skeleton-line" style="width:120px;height:28px"></div>
+        </header>
+        <div class="categories-grid">
+          ${[1,2,3,4,5,6].map(() => `
+            <div class="skeleton-block" style="aspect-ratio:3/2"></div>
+          `).join('')}
+        </div>
+      </div>
+    `
+  }
+
   let categories = []
   try {
     categories = await getCategories()
