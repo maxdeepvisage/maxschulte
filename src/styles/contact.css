@@ -5,8 +5,7 @@
   gap: var(--space-2xl);
   align-items: start;
   align-content: start;
-  padding: var(--page-padding-top) var(--space-2xl) var(--space-2xl);
-  padding-top: calc(var(--page-padding-top) + var(--space-2xl));
+  padding: calc(var(--page-padding-top) + 6rem) var(--space-2xl) var(--space-2xl);
   max-width: 1200px;
   margin: 0 auto;
 }
