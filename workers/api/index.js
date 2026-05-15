@@ -28,6 +28,8 @@ export default {
             r.tags?.includes('cover')
           ) || (resources.resources || [])[0]
 
+          console.log(`[${f.name}] found ${(resources.resources || []).length} images, cover:`, cover?.public_id)
+
           return {
             slug: f.name,
             name: formatName(f.name),
@@ -84,6 +86,28 @@ export default {
           .sort((a, b) => a.order - b.order)
 
         return json(photos, cors)
+      }
+
+      // DEBUG: GET /api/debug
+      if (path === '/api/debug') {
+        const data = await cloudinaryGet(env, `folders/portfolio`)
+        const categories = data.folders || []
+
+        const debug = await Promise.all(categories.map(async f => {
+          const resources = await cloudinaryGet(env,
+            `resources/image?prefix=portfolio/${f.name}/&type=upload&max_results=50&tags=true`
+          )
+          return {
+            category: f.name,
+            totalImages: (resources.resources || []).length,
+            images: (resources.resources || []).map(r => ({
+              id: r.public_id,
+              tags: r.tags || []
+            }))
+          }
+        }))
+
+        return json(debug, cors)
       }
 
       return new Response('Not found', { status: 404, headers: cors })
