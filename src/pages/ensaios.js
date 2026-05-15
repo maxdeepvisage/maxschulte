@@ -105,6 +105,16 @@ function initEnsaios(ensaios, cat) {
       dot.classList.toggle('active', i === index)
     })
 
+    // Scroll para centralizar a tab ativa no mobile
+    const activeTab = tabs[index]
+    if (activeTab && window.matchMedia('(max-width: 767px)').matches) {
+      activeTab.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      })
+    }
+
     current = index
   }
 

@@ -22,16 +22,23 @@
 
 .galeria-sidebar__cat {
   font-family: var(--font-display);
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.3em;
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
   cursor: pointer;
   transition: color var(--transition-fast);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
 }
 
-.galeria-sidebar__cat:hover { color: var(--color-text); }
+.galeria-sidebar__cat:hover {
+  color: var(--color-text);
+}
 
 .galeria-sidebar__list {
   display: flex;
@@ -41,8 +48,8 @@
 
 .galeria-sidebar__item {
   font-family: var(--font-display);
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.2em;
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--color-text-muted);
   cursor: pointer;
@@ -55,6 +62,10 @@
   padding: 0;
   text-align: left;
   min-height: 44px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .galeria-sidebar__item::before {
