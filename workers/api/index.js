@@ -52,17 +52,13 @@ export default {
         for (const [slug, entry] of categoriesMap.entries()) {
           let cover = null
 
-          // 1) procura tag 'cover' em root
+          // 1) procura tag 'cover' apenas em root (somente imagens diretamente na pasta da categoria)
           cover = entry.root.find(r => r.tags?.includes('cover'))?.public_id || null
 
-          // 2) se não achou, procura tag 'cover' em nested
-          if (!cover) cover = entry.nested.find(r => r.tags?.includes('cover'))?.public_id || null
-
-          // 3) fallback: primeira imagem em root
+          // 2) fallback: primeira imagem em root (se não houver tag 'cover')
           if (!cover) cover = entry.root[0]?.public_id || null
 
-          // 4) fallback final: primeira imagem nested
-          if (!cover) cover = entry.nested[0]?.public_id || null
+          // 3) se não há imagens na raiz da categoria, não usar imagens nested como cover (mantém null)
 
           results.push({ slug, name: formatName(slug), cover })
         }
