@@ -6,7 +6,8 @@
 }
 
 .page-header {
-  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
 }
 
 .page-title {

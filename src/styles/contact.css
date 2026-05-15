@@ -2,7 +2,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   padding: var(--page-padding-top) var(--space-2xl) var(--space-2xl);
   max-width: 900px;
   margin: 0 auto;
@@ -15,6 +14,11 @@
   text-transform: uppercase;
   color: var(--color-accent);
   margin-bottom: var(--space-lg);
+}
+
+.contact-hero {
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
 }
 
 .contact-title {
