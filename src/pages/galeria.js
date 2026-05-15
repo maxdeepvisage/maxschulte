@@ -40,6 +40,8 @@ export async function renderGaleria(params = {}) {
         </div>
       </aside>
 
+      <button class="galeria-mobile-back" data-back="/work/${cat}">← ${cat.replace(/-/g, ' ').toUpperCase()}</button>
+
       <div class="galeria-page">
         <div class="mobile-album-nav">
           ${ensaios.map(e => `
@@ -147,6 +149,11 @@ function initGaleria(photos, ensaios, currentEnsaio, cat, ensaioName) {
 
   document.querySelector('.galeria-sidebar__cat')?.addEventListener('click', () => {
     push(`/work/${cat}`)
+  })
+
+  // Mobile back button
+  document.querySelector('.galeria-mobile-back')?.addEventListener('click', e => {
+    push(e.currentTarget.dataset.back)
   })
 
   // Mobile album navigation

@@ -42,5 +42,20 @@ export function renderNavbar() {
   }
   window.addEventListener('scroll', onScroll, { passive: true })
 
+  // Active state
+  function updateActive() {
+    const path = window.location.pathname
+    nav.querySelectorAll('.navbar__links a').forEach(a => {
+      const href = a.dataset.link
+      const isActive = href === '/' ? path === '/' : path.startsWith(href)
+      a.classList.toggle('active', isActive)
+    })
+  }
+  updateActive()
+  window.addEventListener('popstate', updateActive)
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-link]')) setTimeout(updateActive, 0)
+  })
+
   return nav
 }

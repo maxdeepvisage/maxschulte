@@ -43,7 +43,8 @@
   cursor: pointer;
 }
 
-.navbar__links a:hover {
+.navbar__links a:hover,
+.navbar__links a.active {
   color: var(--color-text);
 }
 

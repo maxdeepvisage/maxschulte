@@ -74,6 +74,20 @@ async function navigate(pathname) {
 
   app.innerHTML = await matched.render(matched.params)
 
+  // Título dinâmico
+  const titles = {
+    '/':        'Max Schulte — Photography & Film',
+    '/work':    'Work — Max Schulte',
+    '/movies':  'Movies — Max Schulte',
+    '/about':   'About — Max Schulte',
+    '/contact': 'Contact — Max Schulte',
+    '/privacy': 'Privacy — Max Schulte',
+    '/terms':   'Terms — Max Schulte',
+    '/admin':   'Admin — Max Schulte',
+  }
+  const base = pathname.split('/').slice(0, 2).join('/') || '/'
+  document.title = titles[base] || 'Max Schulte — Photography & Film'
+
   // Fade in
   app.style.opacity = '0'
   requestAnimationFrame(() => {
