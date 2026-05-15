@@ -16,7 +16,8 @@ export default {
       return new Response('Method not allowed', { status: 405, headers: cors })
     }
 
-    const path = url.pathname
+    const rawPath = url.pathname
+    const path = decodeURIComponent(rawPath).toLowerCase()
 
     try {
       // GET /api/categories
@@ -58,7 +59,8 @@ export default {
           // 2) fallback: primeira imagem em root (se não houver tag 'cover')
           if (!cover) cover = entry.root[0]?.public_id || null
 
-          // 3) se não há imagens na raiz da categoria, não usar imagens nested como cover (mantém null)
+          // 3) fallback: primeira imagem nested (se categoria não tiver imagens na raiz)
+          if (!cover) cover = entry.nested[0]?.public_id || null
 
           results.push({ slug, name: formatName(slug), cover })
         }
@@ -151,6 +153,17 @@ function json(data, cors) {
   })
 }
 
+const DISPLAY_NAMES = {
+  'food-and-drinks': 'Food & Drinks',
+  'crooked-three':   'Crooked Three',
+  'freak-dali':      'Freak Dalí',
+  'the-harcourt':    'The Harcourt',
+}
+
 function formatName(slug) {
-  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+  if (DISPLAY_NAMES[slug]) return DISPLAY_NAMES[slug]
+  return slug
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
 }

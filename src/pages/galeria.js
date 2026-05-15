@@ -4,10 +4,17 @@ import { push } from '../router.js'
 export async function renderGaleria(params = {}) {
   const { cat, ensaio } = params
 
-  const [photos, ensaios] = await Promise.all([
-    getPhotos(cat, ensaio),
-    getEnsaios(cat),
-  ])
+  let photos, ensaios
+  try {
+    ;[photos, ensaios] = await Promise.all([
+      getPhotos(cat, ensaio),
+      getEnsaios(cat),
+    ])
+  } catch (err) {
+    return `<div class="empty-page" style="padding:4rem;text-align:center;font-family:monospace">
+      Failed to load gallery. Please try again.
+    </div>`
+  }
 
   if (!photos || !photos.length) {
     return `<div class="empty-page" style="padding:4rem;text-align:center">No photos found.</div>`
