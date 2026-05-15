@@ -359,6 +359,45 @@
   }
 }
 
+/* ===== HERO ROTATION ===== */
+.movies-hero--transitioning .movies-hero__bg img,
+.movies-hero--transitioning .movies-hero__title,
+.movies-hero--transitioning .movies-hero__desc,
+.movies-hero--transitioning .movies-hero__meta {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.movies-hero__bg img {
+  transition: opacity 0.4s ease;
+}
+
+/* ===== DOTS ===== */
+.movies-hero-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: var(--space-md);
+}
+
+.movies-hero-dot {
+  width: 24px;
+  height: 2px;
+  background: rgba(255,255,255,0.3);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.movies-hero-dot.active {
+  width: 40px;
+  background: var(--color-accent);
+}
+
+.movies-hero-dot:hover {
+  background: rgba(255,255,255,0.6);
+}
+
 /* ===== SKELETON ===== */
 @keyframes shimmer {
   0% { opacity: 0.4; }

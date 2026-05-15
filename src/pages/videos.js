@@ -81,6 +81,7 @@ export async function renderVideos(params = {}) {
             </svg>
             <span>Play</span>
           </button>
+          <div class="movies-hero-dots"></div>
         </div>
       </div>
 
@@ -144,9 +145,88 @@ function initMovies(movies) {
 
   if (!player || !iframe) return
 
+  // Hero elements
+  const heroBg    = document.querySelector('.movies-hero__bg img')
+  const heroMeta  = document.querySelector('.movies-hero__meta')
+  const heroTitle = document.querySelector('.movies-hero__title')
+  const heroDesc  = document.querySelector('.movies-hero__desc')
+  const heroBtn   = document.querySelector('.movies-hero__play')
+
+  let heroIndex   = 0
+  let heroTimer   = null
+  let isHovered   = false
+
+  function updateHero(index, animate = true) {
+    const m = movies[index]
+    if (!m) return
+
+    const hero = document.querySelector('.movies-hero')
+    if (animate) hero?.classList.add('movies-hero--transitioning')
+
+    setTimeout(() => {
+      if (heroBg)    heroBg.src = thumbUrl(m.id)
+      if (heroTitle) heroTitle.textContent = m.title
+      if (heroDesc)  heroDesc.textContent  = m.description
+      if (heroBtn)   heroBtn.dataset.index = index
+      if (heroMeta)  heroMeta.innerHTML = [
+        m.location ? `<span>${m.location}</span><span class="movies-dot">·</span>` : '',
+        `<span>${m.year || ''}</span>`
+      ].join('')
+
+      hero?.classList.remove('movies-hero--transitioning')
+    }, animate ? 400 : 0)
+
+    heroIndex = index
+
+    // Atualiza dots
+    document.querySelectorAll('.movies-hero-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === index)
+    })
+  }
+
+  function nextHero() {
+    const next = (heroIndex + 1) % movies.length
+    updateHero(next)
+  }
+
+  function startTimer() {
+    heroTimer = setInterval(nextHero, 9000)
+  }
+
+  function stopTimer() {
+    if (heroTimer) { clearInterval(heroTimer); heroTimer = null }
+  }
+
+  // Dots
+  const dotsContainer = document.querySelector('.movies-hero-dots')
+  if (dotsContainer) {
+    dotsContainer.innerHTML = movies.map((_, i) => `
+      <button class="movies-hero-dot ${i === 0 ? 'active' : ''}"
+              data-hero-index="${i}" aria-label="Go to film ${i + 1}"></button>
+    `).join('')
+
+    dotsContainer.querySelectorAll('.movies-hero-dot').forEach(dot => {
+      dot.addEventListener('click', e => {
+        e.stopPropagation()
+        stopTimer()
+        updateHero(Number(dot.dataset.heroIndex))
+        startTimer()
+      })
+    })
+  }
+
+  // Pause on hover
+  const hero = document.querySelector('.movies-hero')
+  hero?.addEventListener('mouseenter', () => { isHovered = true; stopTimer() })
+  hero?.addEventListener('mouseleave', () => { isHovered = false; startTimer() })
+
+  startTimer()
+
+  // Player
   function open(index) {
     const movie = movies[index]
     if (!movie) return
+    stopTimer()
     iframe.src = `https://www.youtube.com/embed/${movie.id}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`
     pTitle.textContent = movie.title
     pDesc.textContent  = movie.description
@@ -161,66 +241,38 @@ function initMovies(movies) {
     player.classList.remove('open')
     player.setAttribute('aria-hidden', 'true')
     document.body.style.overflow = ''
+    if (!isHovered) startTimer()
   }
 
-  // Mobile swipe to close
+  // Swipe to close
   let touchStartY = 0
-  const onTouchStart = e => {
-    touchStartY = e.touches[0].clientY
-  }
-  const onTouchEnd = e => {
-    const dy = e.changedTouches[0].clientY - touchStartY
-    if (dy > 80) close()
-  }
-  player.addEventListener('touchstart', onTouchStart, { passive: true })
-  player.addEventListener('touchend', onTouchEnd, { passive: true })
+  player.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY }, { passive: true })
+  player.addEventListener('touchend', e => {
+    if (e.changedTouches[0].clientY - touchStartY > 80) close()
+  }, { passive: true })
 
   const onKeydown = e => {
     if (e.key === 'Escape' && player.classList.contains('open')) close()
   }
 
-  // Only play button opens player (not entire hero)
-  const playBtns = document.querySelectorAll('[data-index]')
-  const thumbs   = document.querySelectorAll('.movie-thumb')
-
-  const playHandlers = new Map()
-  const thumbHandlers = new Map()
-
-  playBtns.forEach(btn => {
-    const handler = e => {
+  document.querySelectorAll('.movies-hero__play').forEach(btn => {
+    btn.addEventListener('click', e => {
       e.stopPropagation()
       open(Number(btn.dataset.index))
-    }
-    playHandlers.set(btn, handler)
-    btn.addEventListener('click', handler)
+    })
   })
 
-  thumbs.forEach(thumb => {
-    const handler = () => open(Number(thumb.dataset.index))
-    thumbHandlers.set(thumb, handler)
-    thumb.addEventListener('click', handler)
+  document.querySelectorAll('.movie-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => open(Number(thumb.dataset.index)))
   })
 
   closeBtn.addEventListener('click', close)
   backdrop.addEventListener('click', close)
   window.addEventListener('keydown', onKeydown)
 
-  // Cleanup called by router before navigating
   window.__pageCleanup = () => {
     close()
-
-    playHandlers.forEach((handler, btn) => {
-      btn.removeEventListener('click', handler)
-    })
-    thumbHandlers.forEach((handler, thumb) => {
-      thumb.removeEventListener('click', handler)
-    })
-
-    closeBtn.removeEventListener('click', close)
-    backdrop.removeEventListener('click', close)
+    stopTimer()
     window.removeEventListener('keydown', onKeydown)
-
-    player.removeEventListener('touchstart', onTouchStart)
-    player.removeEventListener('touchend', onTouchEnd)
   }
 }
