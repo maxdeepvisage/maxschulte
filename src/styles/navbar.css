@@ -29,7 +29,7 @@
 
 .navbar__links {
   display: flex;
-  gap: var(--space-xl);
+  gap: var(--space-sm);
   align-items: center;
 }
 
@@ -39,13 +39,16 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
   cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 14px;
 }
 
 .navbar__links a:hover,
 .navbar__links a.active {
   color: var(--color-text);
+  border-color: rgba(255,255,255,0.35);
 }
 
 /* Burger — desktop hidden */

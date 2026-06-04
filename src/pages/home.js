@@ -4,11 +4,11 @@ import { initSlideshow } from '../components/slideshow.js'
 const WHATSAPP = '353000000000'
 
 const HOME_SERVICES = [
-  { num: '01', name: 'Documentaries', desc: 'Most documentaries feel like a report. The ones I make feel like you were there. The difference is knowing when to stop directing and just watch.' },
-  { num: '02', name: 'Weddings', desc: "The day moves fast. People forget things they swore they'd remember. My job is to make sure you don't have to rely on memory." },
-  { num: '03', name: 'Corporate', desc: 'If it looks like every other brand video, it probably converts like one too. I make content that people actually stop to watch.' },
-  { num: '04', name: 'Portraits', desc: "Most people hate being photographed. I've heard it hundreds of times. Give me an hour and you'll see why they change their mind." },
-  { num: '05', name: 'Fashion & Events', desc: "Events disappear the moment they end. I make sure the feeling doesn't." },
+  { name: 'Documentaries', desc: 'Most documentaries feel like a report. The ones I make feel like you were there. The difference is knowing when to stop directing and just watch.' },
+  { name: 'Weddings', desc: "The day moves fast. People forget things they swore they'd remember. My job is to make sure you don't have to rely on memory." },
+  { name: 'Corporate', desc: 'If it looks like every other brand video, it probably converts like one too. I make content that people actually stop to watch.' },
+  { name: 'Portraits', desc: "Most people hate being photographed. I've heard it hundreds of times. Give me an hour and you'll see why they change their mind." },
+  { name: 'Fashion & Events', desc: "Events disappear the moment they end. I make sure the feeling doesn't." },
 ]
 
 export async function renderHome(params = {}) {
@@ -27,7 +27,7 @@ export async function renderHome(params = {}) {
 
       <div class="hero__ui">
         <div class="hero__category-label">PORTFOLIO</div>
-        <p class="hero__tagline">Photographer &amp; filmmaker based in Dublin — documenting what matters, for clients worldwide.</p>
+        <p class="hero__tagline">Select a category to explore the work.</p>
         <div class="hero__counter">
           <button class="hero__nav prev-slide">⟵</button>
           <div class="hero__count">
@@ -50,8 +50,6 @@ export async function renderHome(params = {}) {
           <div class="slide-thumbs"></div>
         </div>
       </div>
-
-      <div class="hero__scroll-hint">scroll or drag</div>
     </div>
 
     <section class="home-about">
@@ -80,9 +78,8 @@ export async function renderHome(params = {}) {
         <div class="home-about__services">
           ${HOME_SERVICES.map(s => `
             <div class="home-about__service-card">
-              <span class="home-about__service-num">${s.num}</span>
-              <p class="home-about__service-desc">${s.desc}</p>
               <span class="home-about__service-name">${s.name}</span>
+              <p class="home-about__service-desc">${s.desc}</p>
             </div>
           `).join('')}
         </div>
