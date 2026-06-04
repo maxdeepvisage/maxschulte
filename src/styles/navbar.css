@@ -32,7 +32,8 @@
   align-items: center;
 }
 
-.navbar__menu-header {
+.navbar__menu-header,
+.navbar__menu-footer {
   display: none;
 }
 
