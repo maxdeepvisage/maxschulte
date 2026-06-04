@@ -44,7 +44,17 @@ export async function renderHome(params = {}) {
     </div>
   `
 
-  requestAnimationFrame(() => initSlideshow(categories))
+  window.__firstCover = categories[0]?.cover || null
+
+  requestAnimationFrame(() => {
+    categories.forEach(cat => {
+      if (cat.cover) {
+        const img = new Image()
+        img.src = imageUrl(cat.cover, 'hero')
+      }
+    })
+    initSlideshow(categories)
+  })
 
   return html
 }

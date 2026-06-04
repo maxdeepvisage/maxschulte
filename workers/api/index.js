@@ -182,7 +182,9 @@ function json(data, cors, ttl = 300) {
     headers: {
       ...cors,
       'Content-Type': 'application/json',
-      'Cache-Control': `public, max-age=${ttl}, stale-while-revalidate=60`,
+      'Cache-Control': `public, max-age=${ttl}, s-maxage=${ttl}, stale-while-revalidate=60`,
+      'CDN-Cache-Control': `max-age=${ttl}`,
+      'Cloudflare-CDN-Cache-Control': `max-age=${ttl}`,
     }
   })
 }

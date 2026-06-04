@@ -81,6 +81,14 @@ async function navigate(pathname) {
     return
   }
 
+  if (pathname === '/' && window.__firstCover) {
+    const preload = document.createElement('link')
+    preload.rel = 'preload'
+    preload.as = 'image'
+    preload.href = `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dxwnh6a6r'}/image/upload/w_1920,q_auto,f_webp/${window.__firstCover}`
+    document.head.appendChild(preload)
+  }
+
   const duration = window.matchMedia('(max-width: 767px)').matches ? 100 : 180
   app.style.transition = `opacity ${duration}ms ease`
   app.style.opacity = '0'

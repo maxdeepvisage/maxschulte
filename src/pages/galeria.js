@@ -137,6 +137,13 @@ function initGaleria(photos, ensaios, currentEnsaio, cat, ensaioName) {
     lightbox.setAttribute('aria-hidden', 'false')
     lightbox.classList.add('open')
     document.body.style.overflow = 'hidden'
+
+    const nextIdx = (index + 1) % photos.length
+    const prevIdx = (index - 1 + photos.length) % photos.length
+    ;[nextIdx, prevIdx].forEach(i => {
+      const img = new Image()
+      img.src = imageUrl(photos[i].publicId, 'lightbox')
+    })
   }
 
   function close() {
