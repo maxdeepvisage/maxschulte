@@ -4,26 +4,39 @@ const PHOTO_ID = 'ganga-5_iw4fis'
 const STEPS = [
   {
     eyebrow: 'About',
-    title: 'I tell stories\nthrough light.',
-    body: 'Placeholder — Max Schulte is a photographer and filmmaker based in Dublin. His work spans documentary, portrait, fashion, and corporate photography — always rooted in the real.',
+    title: 'It started with\na camera.',
+    body: 'It started with a camera and a need to show what most people walk past without noticing. Over the years, that impulse became a career — and the career became a way of connecting people through images that stay with them.',
+    quote: 'I don\'t just film events. I document moments people will want to revisit twenty years from now.',
     align: 'left',
   },
   {
-    eyebrow: 'Approach',
-    title: 'Every frame\nis a decision.',
-    body: 'Placeholder — The best images come from trust. From slowing down. From being present in the room rather than hiding behind the camera. That\'s the only way to capture something real.',
+    eyebrow: 'Experience',
+    title: 'Based in Dublin.\nWorking worldwide.',
+    body: 'I work with clients across the world, bringing together the creative perspective of someone who has lived across different cultures and the technical dedication of someone who takes every project seriously.',
+    stats: [
+      { number: '10+', label: 'Years of experience' },
+      { number: '9', label: 'Countries served' },
+      { number: '300+', label: 'Projects delivered' },
+    ],
     align: 'right',
   },
   {
-    eyebrow: 'Work',
-    title: 'From Dublin\nto everywhere.',
-    body: 'Placeholder — Portraits, documentaries, brand campaigns, events, weddings, and film. Available for projects across Ireland and internationally.',
+    eyebrow: 'Services',
+    title: 'What I can\ncreate for you.',
+    services: [
+      'Corporate Content — Brand videos, social media and campaigns',
+      'Music Videos — Creative production for artists and labels',
+      'Weddings — Photo and film of the most important day',
+      'Portraits — Personal and professional sessions',
+      'Documentaries — Long stories told with depth',
+    ],
     align: 'left',
   },
   {
     eyebrow: 'Let\'s work together',
-    title: 'Have a project\nin mind?',
-    body: 'Placeholder — Every project starts with a conversation. Reach out and let\'s make something worth keeping.',
+    title: 'Want to create\nsomething together?',
+    body: 'No fixed pricing — and that\'s actually a good thing for you. Every project has its own scope, so I work with personalised quotes. You pay for exactly what you need and nothing you don\'t.',
+    body2: 'Tell me about your project. The conversation is always free.',
     align: 'center',
     cta: true,
   },
@@ -43,8 +56,36 @@ export async function renderAbout(params = {}) {
           <div class="about-step ${i === 0 ? 'active' : ''} about-step--${step.align}" data-step="${i}">
             <p class="about-eyebrow">${step.eyebrow}</p>
             <h2 class="about-heading">${step.title.replace('\n', '<br>')}</h2>
-            <p class="about-body">${step.body}</p>
-            ${step.cta ? `<a class="about-cta" data-link="/contact">Get in touch ↗</a>` : ''}
+
+            ${step.quote ? `<blockquote class="about-quote">"${step.quote}"</blockquote>` : ''}
+
+            ${step.body ? `<p class="about-body">${step.body}</p>` : ''}
+
+            ${step.stats ? `
+              <div class="about-stats">
+                ${step.stats.map(s => `
+                  <div class="about-stat">
+                    <span class="about-stat__number">${s.number}</span>
+                    <span class="about-stat__label">${s.label}</span>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+
+            ${step.services ? `
+              <ul class="about-services">
+                ${step.services.map(s => `<li>${s}</li>`).join('')}
+              </ul>
+            ` : ''}
+
+            ${step.body2 ? `<p class="about-body about-body--sm">${step.body2}</p>` : ''}
+
+            ${step.cta ? `
+              <a class="about-cta" href="https://wa.me/353000000000?text=Hi%20Max%2C%20I%27d%20like%20to%20discuss%20a%20project" target="_blank" rel="noopener">
+                Chat on WhatsApp ↗
+              </a>
+              <p class="about-reply">I usually reply within 24 hours</p>
+            ` : ''}
           </div>
         `).join('')}
       </div>
