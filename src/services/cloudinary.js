@@ -16,9 +16,21 @@ export function imageUrl(publicId, transform = 'grid') {
 }
 
 async function apiFetch(path) {
+  const cacheKey = `api:${path}`
+  const cached = sessionStorage.getItem(cacheKey)
+  if (cached) return JSON.parse(cached)
+
   const res = await fetch(`${API_URL}${path}`)
   if (!res.ok) throw new Error(`API error: ${res.status}`)
-  return res.json()
+  const data = await res.json()
+
+  try {
+    sessionStorage.setItem(cacheKey, JSON.stringify(data))
+  } catch (e) {
+    // sessionStorage cheio — ignora
+  }
+
+  return data
 }
 
 export async function getCategories() {

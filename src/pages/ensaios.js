@@ -1,6 +1,7 @@
 import { getEnsaios, imageUrl } from '../services/cloudinary.js'
 import { push } from '../router.js'
-import gsap from 'gsap'
+
+let gsap
 
 export async function renderEnsaios(params = {}) {
   const { cat } = params
@@ -30,7 +31,10 @@ export async function renderEnsaios(params = {}) {
     `
   }
 
-  const ensaios = await getEnsaios(cat).catch(() => [])
+  const [ensaios] = await Promise.all([
+    getEnsaios(cat).catch(() => []),
+    gsap ? Promise.resolve() : import('gsap').then(m => { gsap = m.default }),
+  ])
 
   if (!ensaios.length) {
     return `<div class="empty-page" style="padding:4rem;text-align:center">No albums found.</div>`

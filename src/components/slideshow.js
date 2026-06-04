@@ -1,6 +1,7 @@
-import gsap from 'gsap'
 import { push } from '../router.js'
 import { imageUrl } from '../services/cloudinary.js'
+
+let gsap
 
 const NEXT = 1
 const PREV = -1
@@ -148,7 +149,9 @@ class Slideshow {
   prev() { this.navigate(PREV) }
 }
 
-export function initSlideshow(categories) {
+export async function initSlideshow(categories) {
+  if (!gsap) ({ default: gsap } = await import('gsap'))
+
   const slidesEl = document.querySelector('.slides')
   if (!slidesEl || !categories.length) return
 

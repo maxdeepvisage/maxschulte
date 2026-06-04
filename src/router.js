@@ -1,26 +1,15 @@
-import { renderHome } from './pages/home.js'
-import { renderCategories } from './pages/categories.js'
-import { renderEnsaios } from './pages/ensaios.js'
-import { renderGaleria } from './pages/galeria.js'
-import { renderVideos } from './pages/videos.js'
-import { renderAbout } from './pages/about.js'
-import { renderContact } from './pages/contact.js'
-import { renderAdminLogin } from './pages/admin-login.js'
-import { renderAdminDashboard } from './pages/admin-dashboard.js'
-import { renderLegal } from './pages/legal.js'
-
 const routes = [
-  { path: '/',                        render: renderHome },
-  { path: '/work',                    render: renderCategories },
-  { path: '/work/:cat',               render: renderEnsaios },
-  { path: '/work/:cat/:ensaio',       render: renderGaleria },
-  { path: '/movies',                   render: renderVideos },
-  { path: '/about',                   render: renderAbout },
-  { path: '/contact',                 render: renderContact },
-  { path: '/admin',                   render: renderAdminLogin },
-  { path: '/admin/dashboard',         render: renderAdminDashboard },
-  { path: '/privacy',                 render: () => renderLegal('privacy') },
-  { path: '/terms',                   render: () => renderLegal('terms') },
+  { path: '/',                  render: () => import('./pages/home.js').then(m => m.renderHome) },
+  { path: '/work',              render: () => import('./pages/categories.js').then(m => m.renderCategories) },
+  { path: '/work/:cat',         render: () => import('./pages/ensaios.js').then(m => m.renderEnsaios) },
+  { path: '/work/:cat/:ensaio', render: () => import('./pages/galeria.js').then(m => m.renderGaleria) },
+  { path: '/movies',            render: () => import('./pages/videos.js').then(m => m.renderVideos) },
+  { path: '/about',             render: () => import('./pages/about.js').then(m => m.renderAbout) },
+  { path: '/contact',           render: () => import('./pages/contact.js').then(m => m.renderContact) },
+  { path: '/admin',             render: () => import('./pages/admin-login.js').then(m => m.renderAdminLogin) },
+  { path: '/admin/dashboard',   render: () => import('./pages/admin-dashboard.js').then(m => m.renderAdminDashboard) },
+  { path: '/privacy',           render: () => import('./pages/legal.js').then(m => () => m.renderLegal('privacy')) },
+  { path: '/terms',             render: () => import('./pages/legal.js').then(m => () => m.renderLegal('terms')) },
 ]
 
 function matchRoute(pathname) {
@@ -94,7 +83,8 @@ async function navigate(pathname) {
   app.style.opacity = '0'
   await new Promise(r => setTimeout(r, duration))
 
-  app.innerHTML = await matched.render(matched.params)
+  const renderFn = await matched.render()
+  app.innerHTML = await renderFn(matched.params)
 
   app.style.opacity = '0'
   requestAnimationFrame(() => { app.style.opacity = '1' })
